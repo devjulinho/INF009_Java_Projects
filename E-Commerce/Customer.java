@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Customer extends User{
     String address;
     //Historico - pos-produto
