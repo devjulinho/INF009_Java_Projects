@@ -1,10 +1,13 @@
+import java.util.Vector;
+
 public class Main{
     public static void main(String[] Args){
+        Vector<User> users = new Vector<>();
 
-        //Customer customer = new Customer();
-        Admin admin = new Admin("Julio", "julio@edu.br", "1234");
-        User user = admin.createUser();
-        user.display(user);
+        users.add(new Admin("default", "admin", "admin"));
+        users.get(0).display(users.get(0));
+
+
 
 
     }

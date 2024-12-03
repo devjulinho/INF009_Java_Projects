@@ -17,4 +17,24 @@ public class User{
             System.out.println("Address: " + ((Customer)user).address);
     }
 
+    public void login(){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("What is your e-mail?");
+        String email = scan.nextLine();
+        System.out.println("What is your password?");
+        String password = scan.nextLine();
+    }
+
+    // private void compareEmail(String email, Vector<User> users){
+    //     for (int index = 0, index < users.size(); index++){
+    //         if
+    //     }
+    //
+    // }
+
+    private void validateLogin(String email, Vector<User> users){
+
+
+    }
+
 }
