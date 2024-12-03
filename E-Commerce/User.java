@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.Arrays;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 import javax.crypto.spec.PBEKeySpec;
@@ -9,12 +10,14 @@ public class User{
     int id;
     String name;
     String email;
-    byte[] password;
+    byte[] hashingPassword;
+    byte[] salt;
 
     public User(String name, String email, String password) throws Exception{
         this.name = name;
         this.email = email;
-        this.password = encryptPassword(password);
+        this.salt = generateSalt();
+        this.hashingPassword = encryptPassword(password, salt);
     }
 
     public void display(User user){
@@ -44,15 +47,15 @@ public class User{
 
             for(int numberAttemps = 0; successfulPassword == false; numberAttemps++){
                 System.out.println("What is your password?");
-                String password = scan.nextLine();
+                String typedPassword = scan.nextLine();
 
-                if(comparePassword(encryptPassword(password), users) == false){
+                if(comparePassword(encryptPassword(typedPassword, users.get(0).salt), users) == false){
                     System.out.println("Wrong password. You have only " + (3 - numberAttemps) + " chances");
 
-                if(numberAttemps == 3 && comparePassword(encryptPassword(password), users) == false)
+                if(numberAttemps == 3 && comparePassword(encryptPassword(typedPassword, users.get(0).salt), users) == false)
                     System.exit(0);
                 }
-                successfulPassword = comparePassword(encryptPassword(password), users);
+                successfulPassword = comparePassword(encryptPassword(typedPassword, users.get(0).salt), users);
             }
             successfulLogin = true;
         }
@@ -67,7 +70,7 @@ public class User{
         return salt;
     }
 
-    public byte[] encryptPassword(String password) throws Exception{
+    public byte[] encryptPassword(String password, byte[] salt) throws Exception{
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 4096, 128);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 
@@ -86,9 +89,7 @@ public class User{
     private boolean comparePassword(byte[] encryptedPassword, Vector<User> users){
         for (int index = 0; index < users.size(); index++)
         {
-            System.out.println(users.get(0).password);
-            System.out.println(encryptedPassword);
-            if (users.get(index).password.equals(encryptedPassword))
+            if (Arrays.equals(users.get(index).hashingPassword, encryptedPassword))
                 return true;
         }
         return false;
