@@ -2,12 +2,12 @@ import java.util.Scanner;
 
 public class Admin extends User{
 
-    public Admin(String name, String email, String password){
+    public Admin(String name, String email, String password) throws Exception{
         super(name, email, password);
         //System.out.println("I am here!");
     }
 
-    public User createUser(){
+    public User createUser() throws Exception{
         Scanner userOption = new Scanner(System.in);
         Scanner info = new Scanner(System.in);
         int menuOption = -1;

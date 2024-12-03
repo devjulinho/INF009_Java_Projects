@@ -1,16 +1,20 @@
 import java.util.Scanner;
 import java.util.Vector;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.SecretKeyFactory;
 
 public class User{
     int id;
     String name;
     String email;
-    String password;
+    byte[] password;
 
-    public User(String name, String email, String password){
+    public User(String name, String email, String password) throws Exception{
         this.name = name;
         this.email = email;
-        this.password = password;
+        this.password = encryptPassword(password);
     }
 
     public void display(User user){
@@ -20,7 +24,7 @@ public class User{
             System.out.println("Address: " + ((Customer)user).address);
     }
 
-    public void login(Vector<User> users){
+    public void login(Vector<User> users) throws Exception{
         Scanner scan = new Scanner(System.in);
         boolean successfulLogin = false;
         boolean successfulEmail = false;
@@ -42,17 +46,34 @@ public class User{
                 System.out.println("What is your password?");
                 String password = scan.nextLine();
 
-                if(comparePassword(password, users) == false){
+                if(comparePassword(encryptPassword(password), users) == false){
                     System.out.println("Wrong password. You have only " + (3 - numberAttemps) + " chances");
 
-                if(numberAttemps == 3 && comparePassword(password, users) == false)
+                if(numberAttemps == 3 && comparePassword(encryptPassword(password), users) == false)
                     System.exit(0);
                 }
-                successfulPassword = comparePassword(password, users);
+                successfulPassword = comparePassword(encryptPassword(password), users);
             }
             successfulLogin = true;
         }
         System.out.println("Welcome, Name...");
+    }
+
+    public byte[] generateSalt(){
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+
+        return salt;
+    }
+
+    public byte[] encryptPassword(String password) throws Exception{
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 4096, 128);
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+
+        byte[] hash = factory.generateSecret(spec).getEncoded();
+
+        return hash;
     }
 
     private boolean compareEmail(String email, Vector<User> users){
@@ -62,11 +83,20 @@ public class User{
         return false;
     }
 
-    private boolean comparePassword(String password, Vector<User> users){
+    private boolean comparePassword(byte[] encryptedPassword, Vector<User> users){
         for (int index = 0; index < users.size(); index++)
-            if (users.get(index).password.equals(password))
+        {
+            System.out.println(users.get(0).password);
+            System.out.println(encryptedPassword);
+            if (users.get(index).password.equals(encryptedPassword))
                 return true;
+        }
         return false;
     }
+
+    // public User createDefaltAdmin(String name, String email, String password){
+    //     User firstAdmin = new Admin("Default Account", "admin", encryptPassword("admin"));
+    //     return firstAdmin;
+    // }
 
 }
