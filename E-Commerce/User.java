@@ -12,8 +12,10 @@ public class User{
     String email;
     byte[] hashingPassword;
     byte[] salt;
+    static int referenceId = 0;
 
     public User(String name, String email, String password) throws Exception{
+        this.id = referenceId++;
         this.name = name;
         this.email = email;
         this.salt = generateSalt();
@@ -21,45 +23,51 @@ public class User{
     }
 
     public void display(User user){
+        System.out.println("=====> User " + this.id + " <=====");
         System.out.println("Name: " + this.name);
         System.out.println("E-mail: " + this.email);
         if (user instanceof Customer)
             System.out.println("Address: " + ((Customer)user).address);
     }
 
-    public void login(Vector<User> users) throws Exception{
+    public User login(Vector<User> users) throws Exception{
         Scanner scan = new Scanner(System.in);
         boolean successfulLogin = false;
         boolean successfulEmail = false;
         boolean successfulPassword = false;
+        int userIndex = -1;
 
         while(successfulLogin == false){
             while(successfulEmail == false){
                 System.out.println("What is your e-mail?");
                 String email = scan.nextLine();
 
-                if(compareEmail(email, users) == false){
+                userIndex = compareEmail(email, users);
+
+                if(userIndex == -1){
                     System.out.println("We don't have that e-mail in our database. Please, check correctly.");
                 }
 
-                successfulEmail = compareEmail(email, users);
+                else
+                    successfulEmail = true;
             }
 
             for(int numberAttemps = 0; successfulPassword == false; numberAttemps++){
                 System.out.println("What is your password?");
                 String typedPassword = scan.nextLine();
 
-                if(comparePassword(encryptPassword(typedPassword, users.get(0).salt), users) == false){
+                if(comparePassword(encryptPassword(typedPassword, users.get(userIndex).salt), users) == false){
                     System.out.println("Wrong password. You have only " + (3 - numberAttemps) + " chances");
 
-                if(numberAttemps == 3 && comparePassword(encryptPassword(typedPassword, users.get(0).salt), users) == false)
+                if(numberAttemps == 3 && comparePassword(encryptPassword(typedPassword, users.get(userIndex).salt), users) == false)
                     System.exit(0);
                 }
-                successfulPassword = comparePassword(encryptPassword(typedPassword, users.get(0).salt), users);
+                successfulPassword = comparePassword(encryptPassword(typedPassword, users.get(userIndex).salt), users);
             }
             successfulLogin = true;
         }
-        System.out.println("Welcome, Name...");
+        System.out.println("Welcome, " + users.get(userIndex).name);
+        return users.get(userIndex);
     }
 
     public byte[] generateSalt(){
@@ -79,14 +87,14 @@ public class User{
         return hash;
     }
 
-    private boolean compareEmail(String email, Vector<User> users){
+    protected int compareEmail(String email, Vector<User> users){
         for (int index = 0; index < users.size(); index++)
             if (users.get(index).email.equals(email))
-                return true;
-        return false;
+                return index;
+        return -1;
     }
 
-    private boolean comparePassword(byte[] encryptedPassword, Vector<User> users){
+    protected boolean comparePassword(byte[] encryptedPassword, Vector<User> users){
         for (int index = 0; index < users.size(); index++)
         {
             if (Arrays.equals(users.get(index).hashingPassword, encryptedPassword))

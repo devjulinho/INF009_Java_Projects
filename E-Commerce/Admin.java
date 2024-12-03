@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Vector;
 
 public class Admin extends User{
 
@@ -7,7 +8,7 @@ public class Admin extends User{
         //System.out.println("I am here!");
     }
 
-    public User createUser() throws Exception{
+    public void createUser(Vector<User> users) throws Exception{
         Scanner userOption = new Scanner(System.in);
         Scanner info = new Scanner(System.in);
         int menuOption = -1;
@@ -24,10 +25,18 @@ public class Admin extends User{
                 System.out.println("Invalid option! Please, try again.");
         }
 
-        System.out.println("What's the user name?");
-        String name = info.nextLine();
         System.out.println("What's the user e-mail?");
         String email = info.nextLine();
+        System.out.println(compareEmail(email, users));
+
+        while (compareEmail(email, users) != -1){
+            System.out.println("We already have this e-mail in our database. Please, inform another e-mail or write 'Exit'.");
+            email = info.nextLine();
+        }
+
+
+        System.out.println("What's the user name?");
+        String name = info.nextLine();
         System.out.println("What's the user password?");
         String password = info.nextLine();
 
@@ -46,7 +55,7 @@ public class Admin extends User{
                 break;
             }
         }
-        return newUser;
+        users.add(newUser);
     }
 
 }
