@@ -27,13 +27,15 @@ public class Admin extends User{
 
         System.out.println("What's the user e-mail?");
         String email = info.nextLine();
-        System.out.println(compareEmail(email, users));
+        //System.out.println(compareEmail(email, users));
 
         while (compareEmail(email, users) != -1){
             System.out.println("We already have this e-mail in our database. Please, inform another e-mail or write 'Exit'.");
             email = info.nextLine();
         }
 
+        if(email.equals("Exit"))
+            return;
 
         System.out.println("What's the user name?");
         String name = info.nextLine();

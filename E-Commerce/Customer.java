@@ -3,6 +3,8 @@ import java.util.Vector;
 
 public class Customer extends User{
     String address;
+    ShoppingCart actualShoppingCart;
+    Vector<ShoppingCart> previousShoppingCart;
     //Historico - pos-produto
 
     public Customer(String name, String email, String password, String address) throws Exception{
