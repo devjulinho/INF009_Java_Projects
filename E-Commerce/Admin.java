@@ -58,4 +58,57 @@ public class Admin extends User{
         users.add(newUser);
     }
 
+    public void adminMenu(Vector<User> users) throws Exception{
+        Scanner option = new Scanner(System.in);
+        int menuOption = 0;
+
+        while(menuOption >= 0){
+
+            System.out.println("""
+                Please, choose a action:
+                1 - Create a new product.
+                2 - Create a new user.
+                3 - Report - More expensive order.
+                4 - Report - Product with lowest inventory.
+                0 - Exit.""");
+
+            menuOption = option.nextInt();
+
+            switch(menuOption){
+                case 1:{
+                    System.out.println("Create a new product");
+                    break;
+                }
+
+                case 2:{
+                    System.out.println("=== Create a new user ====");
+                    createUser(users);
+                    break;
+                }
+
+                case 3:{
+                    System.out.println("Report - More expensive order.");
+                    break;
+                }
+
+                case 4:{
+                    System.out.println("Report - Product with lowest inventory.");
+                    break;
+                }
+
+                case 0:{
+                    System.out.println("Thank you. I hope to see you soon.");
+                    menuOption = -1;
+                    break;
+                }
+
+                default:{
+                    System.out.println("Ops, I think we don't have that option. Please, could you choose again?");
+                    break;
+                }
+            }
+        }
+
+    }
+
 }

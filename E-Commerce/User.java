@@ -70,6 +70,8 @@ public class User{
         return users.get(userIndex);
     }
 
+
+
     public byte[] generateSalt(){
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
@@ -101,6 +103,13 @@ public class User{
                 return true;
         }
         return false;
+    }
+
+    public void menu (User currentUser, Vector<User> users) throws Exception{
+        if (currentUser instanceof Customer)
+            ((Customer)currentUser).customerMenu();
+        else if (currentUser instanceof Admin)
+            ((Admin)currentUser).adminMenu(users);
     }
 
     // public User createDefaltAdmin(String name, String email, String password){
