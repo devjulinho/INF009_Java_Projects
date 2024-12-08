@@ -13,6 +13,15 @@ public class Order{
         this.orderedAmount = orderedAmount;
     }
 
+    public void display(Vector<Product> products){
+        Product product = Product.getProductById(products, this.productId);
+        System.out.println("Order id: " + this.id);
+        System.out.println("Product: " + product.name);
+        System.out.println("Amount in this order: " + this.orderedAmount);
+        System.out.println("Total value: $" + this.orderedAmount * product.price);
+        System.out.println("\n");
+    }
+
     public static Order createOrder(Vector<Product> products){
         Scanner askInfo = new Scanner(System.in);
         int amountInfo;
@@ -39,15 +48,6 @@ public class Order{
         Order order = new Order(product.id, amountInfo);
 
         return order;
-    }
-
-    public void display(Vector<Product> products){
-        Product product = Product.getProductById(products, this.productId);
-        System.out.println("Order id: " + this.id);
-        System.out.println("Product: " + product.name);
-        System.out.println("Amount in this order: " + this.orderedAmount);
-        System.out.println("Total value: $" + this.orderedAmount * product.price);
-        System.out.println("\n");
     }
 
 }

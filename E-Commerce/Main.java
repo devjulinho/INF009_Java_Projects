@@ -4,7 +4,6 @@ public class Main{
     public static void main(String[] Args) throws Exception{
         Vector<User> users = new Vector<>();
         Vector<Product> allProducts = new Vector<>();
-
         //Welcome space
         //only in the first creation, do it in the serialization
         //to push Referenceid when desserialize

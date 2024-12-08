@@ -3,7 +3,7 @@ import java.util.Vector;
 
 public class Customer extends User{
     String address;
-    ShoppingCart actualShoppingCart;
+    ShoppingCart currentShoppingCart;
     Vector<ShoppingCart> previousShoppingCart = new Vector<>();
 
     public Customer(String name, String email, String password, String address) throws Exception{
@@ -28,13 +28,14 @@ public class Customer extends User{
             switch(menuOption){
                 case 1:{
                     System.out.println("==== Starting a new order ====");
-                    this.actualShoppingCart = new ShoppingCart();
+                    this.currentShoppingCart = new ShoppingCart();
                     productMenu(products);
                     break;
                 }
 
                 case 2:{
-                    System.out.println("==== View my purchase history ====");
+                    System.out.println("==== My purchase history ====");
+                    previousShoppingCart.forEach(c -> c.display());
                     break;
                 }
 
@@ -64,7 +65,7 @@ public class Customer extends User{
                 1 - See all available products.
                 2 - See a product by id.
                 3 - Add a product in Shopping Cart (by id).
-                4 - See my actual Shopping Cart.
+                4 - See my current Shopping Cart.
                 5 - Remove a product from Shopping Cart.
                 6 - Finish order.""");
 
@@ -93,27 +94,27 @@ public class Customer extends User{
                     if(actualOrder == null)
                         System.out.println("Order cancelled.");
                     else{
-                        this.actualShoppingCart.orders.add(actualOrder);
+                        this.currentShoppingCart.orders.add(actualOrder);
                         System.out.println("Order was added to your shopping cart.");
                     }
                     break;
                 }
 
                 case 4:{
-                    System.out.println("See my actual Shopping Cart");
-                    this.actualShoppingCart.orders.forEach(o -> o.display(products));
+                    System.out.println("See my current Shopping Cart");
+                    this.currentShoppingCart.orders.forEach(o -> o.display(products));
                     break;
                 }
 
                 case 5:{
                     System.out.println("Remove a product from Shopping Cart");
-                    this.actualShoppingCart.removeOrderById(products);
+                    this.currentShoppingCart.removeOrderById(products);
                     break;
                 }
 
                 case 6:{
                     System.out.println("Finish order");
-                    //
+                    stayMenu = !currentShoppingCart.finishOrder(products, currentShoppingCart, previousShoppingCart);
                     break;
                 }
 
