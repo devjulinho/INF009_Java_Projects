@@ -44,11 +44,11 @@ public class Product{
         Scanner selectedId = new Scanner(System.in);
         int idOption = -1;
 
-        while(idOption < 0 || idOption > products.size()){
+        while(idOption < 0 || idOption > Product.referenceId){
             System.out.println("Please, inform a product id:");
             idOption = selectedId.nextInt();
 
-            if(idOption < 0 || idOption > products.size())
+            if(idOption < 0 || idOption > Product.referenceId)
                 System.out.println("We don't have that product id. Please, inform another id:");
         }
 

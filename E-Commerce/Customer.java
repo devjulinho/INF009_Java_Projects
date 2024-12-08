@@ -107,8 +107,7 @@ public class Customer extends User{
 
                 case 5:{
                     System.out.println("Remove a product from Shopping Cart");
-                    //mostrar todas as orders com Id
-                    //pedir o id da order para ser deletada
+                    this.actualShoppingCart.removeOrderById(products);
                     break;
                 }
 
