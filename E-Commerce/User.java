@@ -105,9 +105,9 @@ public class User{
         return false;
     }
 
-    public void menu (User currentUser, Vector<User> users) throws Exception{
+    public void menu (User currentUser, Vector<User> users, Vector<Product> products) throws Exception{
         if (currentUser instanceof Customer)
-            ((Customer)currentUser).customerMenu();
+            ((Customer)currentUser).customerMenu(products);
         else if (currentUser instanceof Admin)
             ((Admin)currentUser).adminMenu(users);
     }

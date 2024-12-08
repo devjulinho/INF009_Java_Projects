@@ -4,14 +4,14 @@ import java.util.Vector;
 public class Customer extends User{
     String address;
     ShoppingCart actualShoppingCart;
-    Vector<ShoppingCart> previousShoppingCart;
+    Vector<ShoppingCart> previousShoppingCart = new Vector<>();
 
     public Customer(String name, String email, String password, String address) throws Exception{
         super(name, email, password);
         this.address = address;
     }
 
-    public void customerMenu(){
+    public void customerMenu(Vector<Product> products){
         Scanner option = new Scanner(System.in);
         int menuOption = 0;
 
@@ -28,6 +28,8 @@ public class Customer extends User{
             switch(menuOption){
                 case 1:{
                     System.out.println("==== Starting a new order ====");
+                    this.actualShoppingCart = new ShoppingCart();
+                    productMenu(products);
                     break;
                 }
 
@@ -54,63 +56,72 @@ public class Customer extends User{
         Product product = null;
         Scanner option = new Scanner(System.in);
         int menuOption;
+        boolean stayMenu = true;
 
-        System.out.println("""
-            ==== Starting a new order ====
-            1 - See all available products.
-            2 - See a product by id.
-            3 - Add a product in Shopping Cart (by id).
-            4 - See my actual Shopping Cart.
-            5 - Remove a product from Shopping Cart.
-            6 - Finish order.""");
+        while(stayMenu){
+            System.out.println("""
+                ==== Starting a new order ====
+                1 - See all available products.
+                2 - See a product by id.
+                3 - Add a product in Shopping Cart (by id).
+                4 - See my actual Shopping Cart.
+                5 - Remove a product from Shopping Cart.
+                6 - Finish order.""");
 
-        menuOption = option.nextInt();
+            menuOption = option.nextInt();
+            option.nextLine();
 
-        switch(menuOption){
-            case 1:{
-                System.out.println("===== AVAILABLE PRODUCTS =====");
-                products.forEach(p -> p.display());
-                break;
-            }
+            switch(menuOption){
+                case 1:{
+                    System.out.println("===== AVAILABLE PRODUCTS =====");
+                    products.stream()
+                            .filter(p -> p.amount > 0)
+                            .forEach(p -> p.display());
+                    System.out.println("Press enter to return to menu:");
+                    option.nextLine();
+                    break;
+                }
 
-            case 2:{
-                product = Product.getProductById(products);
-                product.display();
-                break;
-            }
+                case 2:{
+                    product = Product.getProductById(products);
+                    product.display();
+                    break;
+                }
 
-            case 3:{
+                case 3:{
+                    Order actualOrder = Order.createOrder(products);
+                    if(actualOrder == null)
+                        System.out.println("Order cancelled.");
+                    else{
+                        this.actualShoppingCart.orders.add(actualOrder);
+                        System.out.println("Order was added to your shopping cart.");
+                    }
+                    break;
+                }
 
+                case 4:{
+                    System.out.println("See my actual Shopping Cart");
+                    this.actualShoppingCart.orders.forEach(o -> o.display(products));
+                    break;
+                }
 
+                case 5:{
+                    System.out.println("Remove a product from Shopping Cart");
+                    //mostrar todas as orders com Id
+                    //pedir o id da order para ser deletada
+                    break;
+                }
 
-                //criar um order com o id do produto
-                //adicionar order no ShoppingCart
-                break;
-            }
+                case 6:{
+                    System.out.println("Finish order");
+                    //
+                    break;
+                }
 
-            case 4:{
-                System.out.println("See my actual Shopping Cart");
-                //mostrar todas as orders com Id
-                //pedir o id da order para ser deletada
-                break;
-            }
-
-            case 5:{
-                System.out.println("Remove a product from Shopping Cart");
-                //mostrar todas as orders com Id
-                //pedir o id da order para ser deletada
-                break;
-            }
-
-            case 6:{
-                System.out.println("Finish order");
-                //
-                break;
-            }
-
-            default:{
-                System.out.println("Ops, I think we don't have that option. Please, could you choose again?");
-                break;
+                default:{
+                    System.out.println("Ops, I think we don't have that option. Please, could you choose again?");
+                    break;
+                }
             }
         }
     }
