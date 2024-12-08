@@ -28,10 +28,6 @@ public class Customer extends User{
             switch(menuOption){
                 case 1:{
                     System.out.println("==== Starting a new order ====");
-                    System.out.println("Add product");
-                    System.out.println("Remove a product from Shopping Cart");
-                    System.out.println("View Shopping Cart");
-                    System.out.println("Finish order");
                     break;
                 }
 
@@ -50,6 +46,71 @@ public class Customer extends User{
                     System.out.println("Ops, I think we don't have that option. Please, could you choose again?");
                     break;
                 }
+            }
+        }
+    }
+
+    public void productMenu(Vector<Product> products){
+        Product product = null;
+        Scanner option = new Scanner(System.in);
+        int menuOption;
+
+        System.out.println("""
+            ==== Starting a new order ====
+            1 - See all available products.
+            2 - See a product by id.
+            3 - Add a product in Shopping Cart (by id).
+            4 - See my actual Shopping Cart.
+            5 - Remove a product from Shopping Cart.
+            6 - Finish order.""");
+
+        menuOption = option.nextInt();
+
+        switch(menuOption){
+            case 1:{
+                System.out.println("===== AVAILABLE PRODUCTS =====");
+                products.forEach(p -> p.display());
+                break;
+            }
+
+            case 2:{
+                product = Product.getProductById(products);
+                product.display();
+                break;
+            }
+
+            case 3:{
+
+
+
+                //criar um order com o id do produto
+                //adicionar order no ShoppingCart
+                break;
+            }
+
+            case 4:{
+                System.out.println("See my actual Shopping Cart");
+                //mostrar todas as orders com Id
+                //pedir o id da order para ser deletada
+                break;
+            }
+
+            case 5:{
+                System.out.println("Remove a product from Shopping Cart");
+                //mostrar todas as orders com Id
+                //pedir o id da order para ser deletada
+                break;
+            }
+
+            case 6:{
+                System.out.println("Finish order");
+                //
+                break;
+            }
+
+            default:{
+                System.out.println("Ops, I think we don't have that option. Please, could you choose again?");
+                break;
             }
         }
     }
