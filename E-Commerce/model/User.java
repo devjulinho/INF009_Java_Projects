@@ -47,7 +47,6 @@ public class User{
                 if(userIndex == -1){
                     System.out.println("We don't have that e-mail in our database. Please, check correctly.");
                 }
-
                 else
                     successfulEmail = true;
             }

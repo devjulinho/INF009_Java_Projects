@@ -18,12 +18,5 @@ public class Main{
 
         User currentUser = users.get(0).login(users);
         currentUser.menu(currentUser, users, allProducts);
-        //((Admin)(users.get(0))).adminMenu(users);
-        //((Admin)(users.get(0))).createUser(users);
-
-        //users.forEach(u -> u.display(u));
-        //currentUser.display(currentUser);
-        // System.out.println(users.get(0).compareEmail("admin", users));
-
     }
 }
