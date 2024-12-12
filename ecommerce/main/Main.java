@@ -1,3 +1,14 @@
+package ecommerce.main;
+
+import ecommerce.model.Admin;
+import ecommerce.model.User;
+import ecommerce.model.Customer;
+import ecommerce.model.Product;
+import ecommerce.model.Order;
+import ecommerce.model.ShoppingCart;
+import ecommerce.utils.SecurityUtils;
+import ecommerce.controller.UIController;
+
 import java.util.Vector;
 
 public class Main{

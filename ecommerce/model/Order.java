@@ -1,3 +1,5 @@
+package ecommerce.model;
+
 import java.util.Vector;
 import java.util.Scanner;
 
