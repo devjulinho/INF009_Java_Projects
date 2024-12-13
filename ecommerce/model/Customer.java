@@ -2,6 +2,7 @@ package ecommerce.model;
 
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.HashMap;
 
 public class Customer extends User{
     String address;
@@ -13,7 +14,7 @@ public class Customer extends User{
         this.address = address;
     }
 
-    public void customerMenu(Vector<Product> products){
+    public void menu(User currentUser, HashMap<String, User> users, HashMap<Integer, Product> allProducts){
         Scanner option = new Scanner(System.in);
         int menuOption = 0;
 
@@ -31,7 +32,7 @@ public class Customer extends User{
                 case 1:{
                     System.out.println("==== Starting a new order ====");
                     this.currentShoppingCart = new ShoppingCart();
-                    productMenu(products);
+                    // productMenu(products);
                     break;
                 }
 
