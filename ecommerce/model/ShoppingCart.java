@@ -3,6 +3,7 @@ package ecommerce.model;
 import java.util.Vector;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.io.Serializable;
 
 public class ShoppingCart implements Serializable{
@@ -73,5 +74,38 @@ public class ShoppingCart implements Serializable{
         }
 
         currentUser.previousShoppingCart.add(currentUser.currentShoppingCart);
+    }
+
+    private static ShoppingCart getCustomersMostExpensiveShoppingCart(User currentUser, HashMap<Integer, Product> allProducts){
+        double referenceValue = 0;
+        ShoppingCart mostExpensiveShoppingCart = null;
+
+        for (ShoppingCart shoppingCart : ((Customer)currentUser).previousShoppingCart){
+            if(shoppingCart.getTotalPrice(allProducts) > referenceValue){
+                referenceValue = shoppingCart.getTotalPrice(allProducts);
+                mostExpensiveShoppingCart = shoppingCart;
+            }
+        }
+        return mostExpensiveShoppingCart;
+    }
+
+    public static ArrayList getMostExpensiveShoppingCart(HashMap<String, User> users, HashMap<Integer, Product> allProducts){
+        ArrayList<Object> expensiveShoppingCartAndCustomer = new ArrayList<>();
+        ShoppingCart mostExpensiveShoppingCart = new ShoppingCart();
+        ShoppingCart referenceShoppingCart = null;
+        User shoppingCartOwner = null;
+
+        for (User user : users.values()){
+            if(user instanceof Customer){
+                referenceShoppingCart = getCustomersMostExpensiveShoppingCart(user, allProducts);
+                if(referenceShoppingCart.getTotalPrice(allProducts) > mostExpensiveShoppingCart.getTotalPrice(allProducts)){
+                    mostExpensiveShoppingCart = referenceShoppingCart;
+                    shoppingCartOwner = user;
+                }
+            }
+        }
+        expensiveShoppingCartAndCustomer.add(mostExpensiveShoppingCart);
+        expensiveShoppingCartAndCustomer.add(shoppingCartOwner);
+        return expensiveShoppingCartAndCustomer;
     }
 }

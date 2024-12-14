@@ -45,4 +45,10 @@ public class Product implements Serializable{
     public static Product getProductById(HashMap<Integer, Product> allProducts, int productId){
         return allProducts.get(productId);
     }
+
+    public static void lowestInventory(HashMap<Integer, Product> allProducts){
+        allProducts.entrySet().stream()
+                              .filter(entry -> entry.getValue().amount < 10)
+                              .forEach(entry -> entry.getValue().display());
+    }
 }

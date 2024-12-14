@@ -11,8 +11,10 @@ import ecommerce.model.ShoppingCart;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.ArrayList;
 
 public class UIController{
+    private static Scanner askInfo = new Scanner(System.in);
 
     private static void clearScreen(){
         System.out.print("\033[H\033[2J");
@@ -55,7 +57,7 @@ public class UIController{
                 1 - Create a new product.
                 2 - Create a new user.
                 3 - Report all users.
-                4 - Report - More expensive order.
+                4 - Report - More expensive Shopping Cart.
                 5 - Report - Product with lowest inventory.
                 0 - Exit.""");
 
@@ -63,28 +65,44 @@ public class UIController{
 
             switch(menuOption){
                 case 1:{
+                    UIController.clearScreen();
                     createNewProductMenu(allProducts);
                     break;
                 }
 
                 case 2:{
+                    UIController.clearScreen();
                     System.out.println("=== Create a new user ====");
                     createNewUserMenu(users);
                     break;
                 }
 
                 case 3:{
+                    UIController.clearScreen();
+                    System.out.println("===== ALL USERS =====");
                     User.reportAllUsers(users);
+                    System.out.println("Press enter to return to menu:");
+                    askInfo.nextLine();
                     break;
                 }
 
                 case 4:{
-                    System.out.println("Report - More expensive order.");
+                    UIController.clearScreen();
+                    System.out.println("===== MOST EXPENSIVE SHOPPING CART =====");
+                    ArrayList<Object> mostExpensiveShoppingCartAndOwner = ShoppingCart.getMostExpensiveShoppingCart(users, allProducts);
+                    ((ShoppingCart)mostExpensiveShoppingCartAndOwner.get(0)).display(allProducts);
+                    ((Customer)mostExpensiveShoppingCartAndOwner.get(1)).display();
+                    System.out.println("Press enter to return to menu:");
+                    askInfo.nextLine();
                     break;
                 }
 
                 case 5:{
-                    System.out.println("Report - Product with lowest inventory.");
+                    UIController.clearScreen();
+                    System.out.println("==== PRODUCTS WITH LESS THAN 10 UNITS ====");
+                    Product.lowestInventory(allProducts);
+                    System.out.println("Press enter to return to menu:");
+                    askInfo.nextLine();
                     break;
                 }
 
@@ -95,6 +113,7 @@ public class UIController{
                 }
 
                 default:{
+                    UIController.clearScreen();
                     System.out.println("Ops, I think we don't have that option. Please, could you choose again?");
                     break;
                 }
@@ -104,12 +123,9 @@ public class UIController{
     }
 
     private static void createNewProductMenu(HashMap<Integer, Product> allProducts){
-        Scanner askInfo = new Scanner(System.in);
         String name, description, category;
         double price;
         int id, amount;
-
-        UIController.clearScreen();
 
         System.out.println("======= CREATING A NEW PRODUCT =======");
         System.out.println("Now, we will ask some informations about the product:");
@@ -134,7 +150,6 @@ public class UIController{
     }
 
     private static void createNewUserMenu(HashMap<String, User> users) throws Exception{
-        Scanner askInfo = new Scanner(System.in);
         int menuOption = -1;
         User newUser = null;
         String email, name, password, address;
@@ -190,7 +205,6 @@ public class UIController{
     }
 
     public static void customerMenu(User currentUser, HashMap<String, User> users, HashMap<Integer, Product> allProducts){
-        Scanner askInfo = new Scanner(System.in);
         int menuOption = 0;
 
         System.out.println("Hello, " + currentUser.name);
@@ -207,14 +221,18 @@ public class UIController{
 
             switch(menuOption){
                 case 1:{
+                    UIController.clearScreen();
                     ((Customer)currentUser).createShoppingCart();
                     productMenu((Customer)currentUser, allProducts);
                     break;
                 }
 
                 case 2:{
+                    UIController.clearScreen();
                     System.out.println("==== My purchase history ====");
                     ((Customer)currentUser).previousShoppingCart.forEach(c -> c.display(allProducts));
+                    System.out.println("Press enter to return to menu:");
+                    askInfo.nextLine();
                     break;
                 }
 
@@ -234,7 +252,6 @@ public class UIController{
 
     private static void productMenu(Customer currentUser, HashMap<Integer, Product> allProducts){
         Product product = null;
-        Scanner askInfo = new Scanner(System.in);
         int menuOption;
         boolean stayMenu = true;
 
@@ -271,6 +288,8 @@ public class UIController{
                         product.display();
                     else
                         System.out.println("We don't have that product id!");
+                    System.out.println("Press enter to return to menu:");
+                    askInfo.nextLine();
                     break;
                 }
 
@@ -284,16 +303,20 @@ public class UIController{
                     UIController.clearScreen();
                     System.out.println("===== CURRENT SHOPPING CART =====");
                     currentUser.currentShoppingCart.display(allProducts);
+                    System.out.println("Press enter to return to menu:");
+                    askInfo.nextLine();
                     break;
                 }
 
                 case 5:{
+                    UIController.clearScreen();
                     System.out.println("Remove a product from Shopping Cart");
                     removeOrderMenu(currentUser);
                     break;
                 }
 
                 case 6:{
+                    UIController.clearScreen();
                     System.out.println("Finish order");
                     stayMenu = !finishOrderMenu(currentUser, allProducts);
                     break;
@@ -308,7 +331,6 @@ public class UIController{
     }
 
     private static void newOrderMenu(Customer currentUser, HashMap<Integer, Product> allProducts){
-        Scanner askInfo = new Scanner(System.in);
         int productId;
         int amountInfo;
         Product product;
@@ -342,7 +364,6 @@ public class UIController{
     }
 
     public static void removeOrderMenu(Customer currentUser){
-        Scanner askInfo = new Scanner(System.in);
         int idInfo;
         boolean status;
 
@@ -363,7 +384,6 @@ public class UIController{
     }
 
     public static boolean finishOrderMenu(Customer currentUser, HashMap<Integer, Product> allProducts){
-        Scanner askInfo = new Scanner(System.in);
         int selectedOption;
         Vector<Order> unavailableProducts = null;
 

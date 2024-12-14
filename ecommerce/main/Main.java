@@ -19,15 +19,6 @@ public class Main{
 
         PersistenceController.initialization(users, allProducts);
 
-        System.out.println("---- POS-PERSISTENTE MOMENT -----");
-        System.out.println(users);
-        System.out.println(allProducts);
-
-        //User.reportAllUsers(users);
-        // allProducts.get(0).display();
-
-        //to push Referenceid when desserialize
-
         User currentUser = UIController.login(users);
 
         currentUser.menu(currentUser, users, allProducts);
