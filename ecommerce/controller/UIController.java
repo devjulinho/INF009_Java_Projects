@@ -175,4 +175,151 @@ public class UIController{
         }
     }
 
+    public static void customerMenu(User currentUser, HashMap<String, User> users, HashMap<Integer, Product> allProducts){
+        Scanner askInfo = new Scanner(System.in);
+        int menuOption = 0;
+
+        while(menuOption >= 0){
+
+            System.out.println("""
+                Please, choose a action:
+                1 - Start a new order.
+                2 - View my purchase history.
+                0 - Exit.""");
+
+            menuOption = askInfo.nextInt();
+
+            switch(menuOption){
+                case 1:{
+                    System.out.println("==== Starting a new order ====");
+                    currentUser.currentShoppingCart = new ShoppingCart();
+                    productMenu(currentUser, allProducts);
+                    break;
+                }
+
+                case 2:{
+                    System.out.println("==== My purchase history ====");
+                    currentUser.previousShoppingCart.forEach(c -> c.display());
+                    break;
+                }
+
+                case 0:{
+                    System.out.println("Thank you. I hope to see you soon.");
+                    menuOption = -1;
+                    break;
+                }
+
+                default:{
+                    System.out.println("Ops, I think we don't have that option. Please, could you choose again?");
+                    break;
+                }
+            }
+        }
+    }
+
+    private void productMenu(User currentUser, HashMap<Integer, Product> allProducts){
+        Product product = null;
+        Scanner askInfo = new Scanner(System.in);
+        int menuOption;
+        boolean stayMenu = true;
+
+        while(stayMenu){
+            System.out.println("""
+                ==== Starting a new order ====
+                1 - See all available products.
+                2 - See a product by id.
+                3 - Add a product in Shopping Cart (by id).
+                4 - See my current Shopping Cart.
+                5 - Remove a product from Shopping Cart.
+                6 - Finish order.""");
+
+            menuOption = askInfo.nextInt();
+            askInfo.nextLine();
+
+            switch(menuOption){
+                case 1:{
+                    UIController.clearScreen();
+                    System.out.println("===== AVAILABLE PRODUCTS =====");
+                    Product.displayAllAvailableProducts(allProducts);
+                    System.out.println("Press enter to return to menu:");
+                    option.nextLine();
+                    UIController.clearScreen();
+                    break;
+                }
+
+                case 2:{
+                    UIController.clearScreen();
+                    System.out.println("Please, inform the id:")
+                    int productId = askInfo.nextInt();
+                    product = Product.getProductById(allProducts, productId);
+                    product.display();
+                    break;
+                }
+
+                case 3:{
+                    UIController.clearScreen();
+                    newOrderMenu(currentUser, allProducts);
+                    break;
+                }
+
+                case 4:{
+                    UIController.clearScreen();
+                    System.out.println("===== CURRENT SHOPPING CART =====");
+                    currentUser.currentShoppingCart.display(allProducts);
+                    break;
+                }
+
+                case 5:{
+                    System.out.println("Remove a product from Shopping Cart");
+                    this.currentShoppingCart.removeOrderById(products);
+                    break;
+                }
+
+                case 6:{
+                    System.out.println("Finish order");
+                    stayMenu = !currentShoppingCart.finishOrder(products, currentShoppingCart, previousShoppingCart);
+                    break;
+                }
+
+                default:{
+                    System.out.println("Ops, I think we don't have that option. Please, could you choose again?");
+                    break;
+                }
+            }
+        }
+    }
+
+    private void newOrderMenu(User currentUser, HashMap<Integer, Product> allProducts){
+        Scanner askInfo = new Scanner(System.in);
+        int productId;
+        int amountInfo;
+        Product product;
+
+        Product.displayAllAvailableProducts(allProducts);
+
+        do{
+            System.out.println("Please, inform the product id you want to buy");
+            productId = askInfo.nextInt();
+
+            product = Product.getProductById(allProducts, productId);
+
+            if(product == null || product.amount == 0){
+                System.out.println("We don't have that product in our storage!");
+                return null;
+            }
+        } while(product == null || product.amount == 0);
+
+        do {
+            System.out.println("Please, inform how many units you want to buy:");
+            amountInfo = askInfo.nextInt();
+
+            if(product.amount < amountInfo || amountInfo <= 0){
+                System.out.println("We only have " + product.amount + " units.");
+            }
+        } while (product.amount < amountInfo || amountInfo <= 0);
+
+        Customer.createOrder(product.id, amountInfo);
+
+        System.out.println("Your order was successfully added to your Shopping Cart!");
+    }
 }

@@ -34,22 +34,14 @@ public class Product{
         System.out.println("\n");
     }
 
-    public static Product getProductById(Vector<Product> products, int idOption){
-        return products.get(idOption);
+    public static void displayAllAvailableProducts(HashMap<Integer, Product> allProducts){
+        allProducts.stream()
+                   .filter((k, p) -> p.amount > 0)
+                   .forEach((k, p) -> p.display());
     }
 
-    public static Product getProductById(Vector<Product> products){
-        Scanner selectedId = new Scanner(System.in);
-        int idOption = -1;
 
-        while(idOption < 0 || idOption >= Product.referenceId){
-            System.out.println("Please, inform a product id:");
-            idOption = selectedId.nextInt();
-
-            if(idOption < 0 || idOption >= Product.referenceId)
-                System.out.println("We don't have that product id. Please, inform another id:");
-        }
-
-        return products.get(idOption);
+    public static Product getProductById(HashMap<Integer, Product> allProducts, int productId){
+        return products.get(productId);
     }
 }

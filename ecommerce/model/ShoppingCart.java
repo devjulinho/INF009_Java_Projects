@@ -12,8 +12,12 @@ public class ShoppingCart{
         id = referenceId++;
     }
 
-    public void display(){
-
+    public void display(HashMap<Integer, Product> allProducts){
+        System.out.println("Shopping Cart ID -> " + this.id);
+        System.out.println("Number of orders -> " + orders.size());
+        System.out.println("Total to pay -> $" + getTotalPrice(allProducts));
+        System.out.println("_________________________");
+        orders.forEach(o -> o.display(allProducts));
     }
 
     public void removeOrderById(Vector<Product> products){
@@ -47,19 +51,19 @@ public class ShoppingCart{
         }
     }
 
-    public void removeAllOrders(Vector<Product> products){
+    public void removeAllOrders(HashMap<Integer, Product> allProducts){
         for (Order order : orders){
             Product product = Product.getProductById(products, order.productId);
             product.amount += order.orderedAmount;
         }
     }
 
-    public double getTotalPrice(Vector<Product> products){
+    public double getTotalPrice(HashMap<Integer, Product> allProducts){
         double totalPrice = 0.0;
         Product product;
 
         for (Order order : orders){
-            product = Product.getProductById(products, order.productId);
+            product = Product.getProductById(allProducts, order.productId);
             totalPrice += (product.price * order.orderedAmount);
         }
 
