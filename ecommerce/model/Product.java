@@ -3,8 +3,9 @@ package ecommerce.model;
 import java.util.Vector;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.io.Serializable;
 
-public class Product{
+public class Product implements Serializable{
     public int id;
     public static int referenceId = 0;
     public String name;

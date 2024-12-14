@@ -5,8 +5,10 @@ import ecommerce.utils.SecurityUtils;
 import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.io.Serializable;
 
-public abstract class User{
+public abstract class User implements Serializable{
+    private static final long serialVersionUID = 1L;
     public int id;
     public String name;
     public String email;
@@ -39,22 +41,18 @@ public abstract class User{
         return null;
     }
 
-    // private static int compareEmail(String email, Vector<User> users){
-    //     for (int index = 0; index < users.size(); index++)
-    //         if (users.get(index).email.equals(email))
-    //             return index;
-    //     return -1;
-    // }
-
     private static boolean comparePassword(byte[] encryptedPassword, User user){
         if (Arrays.equals(user.hashingPassword, encryptedPassword))
                 return true;
         return false;
     }
 
-    // public User createDefaltAdmin(String name, String email, String password){
-    //     User firstAdmin = new Admin("Default Account", "admin", encryptPassword("admin"));
-    //     return firstAdmin;
-    // }
+    public static void reportAllUsers(HashMap<String, User> users){
+        users.entrySet().stream()
+                        .forEach(entry -> entry.getValue().display());
+    }
 
+    public static void createDefaultAdmin(HashMap<String, User> users) throws Exception{
+        users.put("admin@ecommerce.com", new Admin("Default Account", "admin@ecommerce.com", "admin"));
+    }
 }

@@ -46,14 +46,17 @@ public class UIController{
         Scanner option = new Scanner(System.in);
         int menuOption = 0;
 
+        System.out.println("Hello, " + currentUser.name);
+
         while(menuOption >= 0){
 
             System.out.println("""
                 Please, choose a action:
                 1 - Create a new product.
                 2 - Create a new user.
-                3 - Report - More expensive order.
-                4 - Report - Product with lowest inventory.
+                3 - Report all users.
+                4 - Report - More expensive order.
+                5 - Report - Product with lowest inventory.
                 0 - Exit.""");
 
             menuOption = option.nextInt();
@@ -71,11 +74,16 @@ public class UIController{
                 }
 
                 case 3:{
-                    System.out.println("Report - More expensive order.");
+                    User.reportAllUsers(users);
                     break;
                 }
 
                 case 4:{
+                    System.out.println("Report - More expensive order.");
+                    break;
+                }
+
+                case 5:{
                     System.out.println("Report - Product with lowest inventory.");
                     break;
                 }
@@ -145,16 +153,19 @@ public class UIController{
         askInfo.nextLine();
 
         do{
-            System.out.println("What's the user e-mail?");
+            System.out.println("What's the user e-mail? (Please, use our domain: @ecommerce.com)");
 
             email = askInfo.nextLine();
 
             if (users.get(email) != null)
                 System.out.println("We already have this e-mail in our database. Please, inform another e-mail or write 'Exit'.");
 
+            if (!email.endsWith("@ecommerce.com"))
+                System.out.println("Ops, I think you put a incorrent domain. Please, use @ecommerce.com");
+
             if(email.equals("Exit"))
                 return;
-        } while (users.get(email) != null);
+        } while (users.get(email) != null || !email.endsWith("@ecommerce.com"));
 
         System.out.println("What's the user name?");
         name = askInfo.nextLine();
@@ -181,6 +192,8 @@ public class UIController{
     public static void customerMenu(User currentUser, HashMap<String, User> users, HashMap<Integer, Product> allProducts){
         Scanner askInfo = new Scanner(System.in);
         int menuOption = 0;
+
+        System.out.println("Hello, " + currentUser.name);
 
         while(menuOption >= 0){
 
@@ -418,5 +431,13 @@ public class UIController{
             }
         }
         return false;
+    }
+
+    public static void initializationMessage(){
+        System.out.println("Welcome to ecommerce.com!");
+    }
+
+    public static void finalizationMessage(){
+        System.out.println("Thank you for using ecommerce.com!");
     }
 }

@@ -3,8 +3,9 @@ package ecommerce.model;
 import java.util.Vector;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.io.Serializable;
 
-public class ShoppingCart{
+public class ShoppingCart implements Serializable{
     public int id;
     public static int referenceId = 0;
     public Vector<Order> orders = new Vector<>();
@@ -14,7 +15,7 @@ public class ShoppingCart{
     }
 
     public void display(HashMap<Integer, Product> allProducts){
-        System.out.println("Shopping Cart ID -> " + this.id);
+        System.out.println("===== Shopping Cart ID -> " + this.id + "======");
         System.out.println("Number of orders -> " + orders.size());
         System.out.println("Total to pay -> $" + getTotalPrice(allProducts));
         System.out.println("_________________________");

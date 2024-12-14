@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class SecurityUtils{
     public static byte[] salt = generateSalt();
 
-    public static byte[] generateSalt(){
+    private static byte[] generateSalt(){
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
 
