@@ -22,9 +22,7 @@ public abstract class User{
 
     public abstract void display();
 
-    public void menu(User currentUser, HashMap<String, User> users, HashMap<Integer, Product> allProducts) throws Exception{
-        System.out.println("Late binding.");
-    }
+    public abstract void menu(User currentUser, HashMap<String, User> users, HashMap<Integer, Product> allProducts) throws Exception;
 
     public static User login (HashMap<String, User> users, String email, String password) throws Exception{
         boolean successfulLogin = false;

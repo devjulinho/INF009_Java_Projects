@@ -32,8 +32,5 @@ public class Main{
         System.out.println("Hello, " + currentUser.name);
 
         currentUser.menu(currentUser, users, allProducts);
-
-        // User currentUser = users.get(0).login(users);
-        // currentUser.menu(currentUser, users, allProducts);
     }
 }
