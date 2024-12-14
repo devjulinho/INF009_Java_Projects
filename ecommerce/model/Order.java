@@ -5,10 +5,10 @@ import java.util.Scanner;
 import java.util.HashMap;
 
 public class Order{
-    int id;
-    static int referenceId = 0;
-    int productId;
-    int orderedAmount;
+    public int id;
+    public static int referenceId = 0;
+    public int productId;
+    public int orderedAmount;
 
     public Order(int productId, int orderedAmount){
         this.id = referenceId++;
@@ -17,7 +17,7 @@ public class Order{
     }
 
     public void display(HashMap<Integer, Product> allProducts){
-        Product product = Product.getProductById(products, this.productId);
+        Product product = Product.getProductById(allProducts, this.productId);
         System.out.println("Order id: " + this.id);
         System.out.println("Product: " + product.name);
         System.out.println("Amount in this order: " + this.orderedAmount);
@@ -25,8 +25,8 @@ public class Order{
         System.out.println("\n");
     }
 
-    public static Order createNewOrder(User currentUser, int id, int orderedAmount){
-        currentUser.currentShoppingCart.add(new Order(id, orderedAmount));
+    public static void createNewOrder(Customer currentUser, int id, int orderedAmount){
+        currentUser.currentShoppingCart.orders.add(new Order(id, orderedAmount));
     }
 
 }

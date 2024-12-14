@@ -5,9 +5,12 @@ import ecommerce.model.Admin;
 import ecommerce.model.Customer;
 import ecommerce.model.Product;
 import ecommerce.utils.SecurityUtils;
+import ecommerce.model.Order;
+import ecommerce.model.ShoppingCart;
 
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Vector;
 
 public class UIController{
 
@@ -191,15 +194,14 @@ public class UIController{
 
             switch(menuOption){
                 case 1:{
-                    System.out.println("==== Starting a new order ====");
-                    currentUser.currentShoppingCart = new ShoppingCart();
-                    productMenu(currentUser, allProducts);
+                    ((Customer)currentUser).createShoppingCart();
+                    productMenu((Customer)currentUser, allProducts);
                     break;
                 }
 
                 case 2:{
                     System.out.println("==== My purchase history ====");
-                    currentUser.previousShoppingCart.forEach(c -> c.display());
+                    ((Customer)currentUser).previousShoppingCart.forEach(c -> c.display(allProducts));
                     break;
                 }
 
@@ -217,7 +219,7 @@ public class UIController{
         }
     }
 
-    private void productMenu(User currentUser, HashMap<Integer, Product> allProducts){
+    private static void productMenu(Customer currentUser, HashMap<Integer, Product> allProducts){
         Product product = null;
         Scanner askInfo = new Scanner(System.in);
         int menuOption;
@@ -242,17 +244,20 @@ public class UIController{
                     System.out.println("===== AVAILABLE PRODUCTS =====");
                     Product.displayAllAvailableProducts(allProducts);
                     System.out.println("Press enter to return to menu:");
-                    option.nextLine();
+                    askInfo.nextLine();
                     UIController.clearScreen();
                     break;
                 }
 
                 case 2:{
                     UIController.clearScreen();
-                    System.out.println("Please, inform the id:")
+                    System.out.println("Please, inform the id:");
                     int productId = askInfo.nextInt();
                     product = Product.getProductById(allProducts, productId);
-                    product.display();
+                    if(product != null)
+                        product.display();
+                    else
+                        System.out.println("We don't have that product id!");
                     break;
                 }
 
@@ -271,13 +276,13 @@ public class UIController{
 
                 case 5:{
                     System.out.println("Remove a product from Shopping Cart");
-                    this.currentShoppingCart.removeOrderById(products);
+                    removeOrderMenu(currentUser);
                     break;
                 }
 
                 case 6:{
                     System.out.println("Finish order");
-                    stayMenu = !currentShoppingCart.finishOrder(products, currentShoppingCart, previousShoppingCart);
+                    stayMenu = !finishOrderMenu(currentUser, allProducts);
                     break;
                 }
 
@@ -289,7 +294,7 @@ public class UIController{
         }
     }
 
-    private void newOrderMenu(User currentUser, HashMap<Integer, Product> allProducts){
+    private static void newOrderMenu(Customer currentUser, HashMap<Integer, Product> allProducts){
         Scanner askInfo = new Scanner(System.in);
         int productId;
         int amountInfo;
@@ -305,7 +310,7 @@ public class UIController{
 
             if(product == null || product.amount == 0){
                 System.out.println("We don't have that product in our storage!");
-                return null;
+                return;
             }
         } while(product == null || product.amount == 0);
 
@@ -318,8 +323,100 @@ public class UIController{
             }
         } while (product.amount < amountInfo || amountInfo <= 0);
 
-        Customer.createOrder(product.id, amountInfo);
+        Order.createNewOrder(currentUser, product.id, amountInfo);
 
         System.out.println("Your order was successfully added to your Shopping Cart!");
+    }
+
+    public static void removeOrderMenu(Customer currentUser){
+        Scanner askInfo = new Scanner(System.in);
+        int idInfo;
+        boolean status;
+
+        do{
+            System.out.println("Please, inform the Order ID that you want to remove:");
+            idInfo = askInfo.nextInt();
+
+            if(idInfo < 0 || idInfo > Order.referenceId)
+                System.out.println("We didn't find a order with this id in your ShoppingCart. Please, inform another id:");
+        }while (idInfo < 0 || idInfo > Order.referenceId);
+
+        status = ShoppingCart.removeOrderById(currentUser, idInfo);
+
+        if (status == false)
+            System.out.println("We didn't find that order id in your Shopping Cart.");
+        else
+            System.out.println("We removed that order from your Shopping Cart!");
+    }
+
+    public static boolean finishOrderMenu(Customer currentUser, HashMap<Integer, Product> allProducts){
+        Scanner askInfo = new Scanner(System.in);
+        int selectedOption;
+        Vector<Order> unavailableProducts = null;
+
+        if(currentUser.currentShoppingCart.orders.size() == 0){
+            System.out.println("You don't have products in your Shopping Cart. Press enter to continue shopping.");
+            askInfo.nextLine();
+            return true;
+        }
+
+        currentUser.currentShoppingCart.display(allProducts);
+
+        do {
+            System.out.println("""
+                                  Do you want to finish this order?
+                                  1 - Yes.
+                                  2 - No.""");
+            selectedOption = askInfo.nextInt();
+
+            if (selectedOption < 1 || selectedOption > 2){
+                System.out.println("Ops, I didn't get this option. Could you select a valid option, please:");
+            }
+        } while (selectedOption < 1 || selectedOption > 2);
+
+        switch (selectedOption){
+            case 1:{
+                unavailableProducts = ShoppingCart.areProductsAvailable(currentUser.currentShoppingCart, allProducts);
+
+                if(unavailableProducts != null){
+                    System.out.println("We don't have storage enough for some orders:");
+                    for (Order order : unavailableProducts){
+                        System.out.println("Order ID: " + order.id + " - Order Product: " + allProducts.get(order.productId).name);
+                        System.out.println("Amount required: " + order.orderedAmount + " - Storage Amount: " + allProducts.get(order.productId).amount);
+                        System.out.println("\n");
+                    }
+                    return false;
+                }
+                else{
+                    ShoppingCart.finishOrder(currentUser, allProducts);
+                    System.out.println("Thank you for buying with us!");
+                    return true;
+                }
+            }
+            case 2:{
+                do {
+                    System.out.println("""
+                                        Please, choose one option:
+                                        1 - I want to continue shopping.
+                                        2 - I want to cancel this purchase.""");
+                    selectedOption = askInfo.nextInt();
+
+                    if (selectedOption < 1 || selectedOption > 2){
+                        System.out.println("Ops, I didn't get this option. Could you select a valid option, please:");
+                    }
+                } while (selectedOption < 1 || selectedOption > 2);
+
+                if (selectedOption == 1){
+                    return false;
+                }
+
+                else{
+                    currentUser.currentShoppingCart.removeAllOrders(currentUser);
+                    System.out.println("Your purchase was cancelled and your Shopping Cart was cleaned!");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

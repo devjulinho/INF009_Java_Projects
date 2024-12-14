@@ -33,8 +33,6 @@ public class Main{
 
         currentUser.menu(currentUser, users, allProducts);
 
-        users.forEach((k, u) -> u.display());
-
         // User currentUser = users.get(0).login(users);
         // currentUser.menu(currentUser, users, allProducts);
     }

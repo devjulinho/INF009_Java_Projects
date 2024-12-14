@@ -35,13 +35,13 @@ public class Product{
     }
 
     public static void displayAllAvailableProducts(HashMap<Integer, Product> allProducts){
-        allProducts.stream()
-                   .filter((k, p) -> p.amount > 0)
-                   .forEach((k, p) -> p.display());
+        allProducts.entrySet().stream()
+                              .filter(entry -> entry.getValue().amount > 0)
+                              .forEach(entry -> entry.getValue().display());
     }
 
 
     public static Product getProductById(HashMap<Integer, Product> allProducts, int productId){
-        return products.get(productId);
+        return allProducts.get(productId);
     }
 }

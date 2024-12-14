@@ -1,13 +1,15 @@
 package ecommerce.model;
 
+import ecommerce.controller.UIController;
+
 import java.util.Scanner;
 import java.util.Vector;
 import java.util.HashMap;
 
 public class Customer extends User{
-    String address;
-    ShoppingCart currentShoppingCart;
-    Vector<ShoppingCart> previousShoppingCart = new Vector<>();
+    private String address;
+    public ShoppingCart currentShoppingCart;
+    public Vector<ShoppingCart> previousShoppingCart = new Vector<>();
 
     public Customer(String name, String email, String password, String address) throws Exception{
         super(name, email, password);
@@ -23,5 +25,9 @@ public class Customer extends User{
 
     public void menu(User currentUser, HashMap<String, User> users, HashMap<Integer, Product> allProducts){
         UIController.customerMenu(currentUser, users, allProducts);
+    }
+
+    public void createShoppingCart(){
+        currentShoppingCart = new ShoppingCart();
     }
 }
