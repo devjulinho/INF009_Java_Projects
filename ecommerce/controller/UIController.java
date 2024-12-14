@@ -57,13 +57,13 @@ public class UIController{
 
             switch(menuOption){
                 case 1:{
-                    System.out.println("Create a new product");
+                    createNewProductMenu(allProducts);
                     break;
                 }
 
                 case 2:{
                     System.out.println("=== Create a new user ====");
-                    ((Admin)currentUser).createUser(users);
+                    createNewUserMenu(users);
                     break;
                 }
 
@@ -90,6 +90,89 @@ public class UIController{
             }
         }
         return menuOption;
+    }
+
+    private static void createNewProductMenu(HashMap<Integer, Product> allProducts){
+        Scanner askInfo = new Scanner(System.in);
+        String name, description, category;
+        double price;
+        int id, amount;
+
+        UIController.clearScreen();
+
+        System.out.println("======= CREATING A NEW PRODUCT =======");
+        System.out.println("Now, we will ask some informations about the product:");
+        System.out.println("Please, inform the product name:");
+        name = askInfo.nextLine();
+
+        System.out.println("Please, inform description for the new product:");
+        description = askInfo.nextLine();
+
+        System.out.println("Please, inform the product category:");
+        category = askInfo.nextLine();
+
+        System.out.println("Please, inform the product price:");
+        price = askInfo.nextDouble();
+
+        System.out.println("How many products do you have to sell?");
+        amount = askInfo.nextInt();
+
+        Product.createNewProduct(allProducts, name, description, price, amount, category);
+
+        System.out.println("We successfully create a new product. Now, they're on sale!");
+    }
+
+    private static void createNewUserMenu(HashMap<String, User> users) throws Exception{
+        Scanner askInfo = new Scanner(System.in);
+        int menuOption = -1;
+        User newUser = null;
+        String email, name, password, address;
+
+        while (menuOption < 1 || menuOption > 2){
+            System.out.println("What user type do you want do create?\n" +
+                "1- Administrator\n" +
+                "2- Customer");
+
+            menuOption = askInfo.nextInt();
+
+            if (menuOption < 1 || menuOption > 2)
+                System.out.println("Invalid option! Please, try again.");
+        }
+
+        askInfo.nextLine();
+
+        do{
+            System.out.println("What's the user e-mail?");
+
+            email = askInfo.nextLine();
+
+            if (users.get(email) != null)
+                System.out.println("We already have this e-mail in our database. Please, inform another e-mail or write 'Exit'.");
+
+            if(email.equals("Exit"))
+                return;
+        } while (users.get(email) != null);
+
+        System.out.println("What's the user name?");
+        name = askInfo.nextLine();
+        System.out.println("What's the user password?");
+        password = askInfo.nextLine();
+
+        switch (menuOption){
+            case 1:{
+                Admin.createUser(users, name, email, password, null);
+                System.out.println("New administrator was created!");
+                break;
+            }
+
+            case 2:{
+                System.out.println("What's the user address?");
+                address = askInfo.nextLine();
+                Admin.createUser(users, name, email, password, address);
+                System.out.println("New customer was created!");
+                break;
+            }
+        }
     }
 
 }

@@ -2,15 +2,16 @@ package ecommerce.model;
 
 import java.util.Vector;
 import java.util.Scanner;
+import java.util.HashMap;
 
 public class Product{
-    int id;
-    static int referenceId = 0;
-    String name;
-    String description;
-    double price;
-    int amount;
-    String category;
+    public int id;
+    public static int referenceId = 0;
+    public String name;
+    public String description;
+    public double price;
+    public int amount;
+    public String category;
 
     public Product(String name, String description, double price, int amount, String category){
         this.id = referenceId++;
@@ -21,6 +22,10 @@ public class Product{
         this.category = category;
     }
 
+    public static void createNewProduct(HashMap<Integer, Product> allProducts, String name, String description, double price, int amount, String category){
+        allProducts.put(Product.referenceId, new Product(name, description, price, amount, category));
+    }
+
     public void display(){
         System.out.println("******* Product id: " + this.id + "*******");
         System.out.println("Name: " + this.name);
@@ -28,15 +33,6 @@ public class Product{
         System.out.println("Amount: " + this.amount);
         System.out.println("\n");
     }
-
-    // public void showStoredProducts(Vector<Product> products){
-    //     for(int productIndex = 0; productIndex < products.size(); productIndex++){
-    //         if(products.get(productIndex).amount > 0){
-    //             products.get(productIndex).display();
-    //             System.out.println("\n");
-    //         }
-    //     }
-    // }
 
     public static Product getProductById(Vector<Product> products, int idOption){
         return products.get(idOption);

@@ -14,6 +14,13 @@ public class Customer extends User{
         this.address = address;
     }
 
+        public void display(){
+        System.out.println("=====> User " + this.id + " <=====");
+        System.out.println("Name: " + this.name);
+        System.out.println("E-mail: " + this.email);
+        System.out.println("Address: " + this.address);
+    }
+
     public void menu(User currentUser, HashMap<String, User> users, HashMap<Integer, Product> allProducts){
         Scanner option = new Scanner(System.in);
         int menuOption = 0;

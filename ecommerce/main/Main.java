@@ -23,16 +23,17 @@ public class Main{
         users.put("julio@ifba.edu", new Admin("Julio", "julio@ifba.edu", "testing"));
         users.put("maria@ifba.edu", new Customer("Maria", "maria@ifba.edu", "testing2", "Rua A"));
 
-        // allProducts.add(new Product("feijao", "feijao preto", 7.50, 10, "Alimentos"));
-        // allProducts.add(new Product("carne", "carne para churrasco", 21.40, 30, "Alimentos"));
-        // allProducts.add(new Product("refrigerante", "para festas", 9.50, 10, "Bebidas"));
-        // allProducts.add(new Product("colher", "para comer", 12.10, 0, "Utesilios"));
+        allProducts.put(Product.referenceId, new Product("feijao", "feijao de caldo", 7.95, 30, "Alimentos"));
+        allProducts.put(Product.referenceId, new Product("carne", "picanha", 23.95, 10, "Alimentos"));
+        allProducts.put(Product.referenceId, new Product("farinha", "farinha de mandioca", 4.75, 20, "Alimentos"));
 
         User currentUser = UIController.login(users);
 
         System.out.println("Hello, " + currentUser.name);
 
         currentUser.menu(currentUser, users, allProducts);
+
+        users.forEach((k, u) -> u.display());
 
         // User currentUser = users.get(0).login(users);
         // currentUser.menu(currentUser, users, allProducts);

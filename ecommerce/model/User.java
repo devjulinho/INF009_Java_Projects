@@ -6,7 +6,7 @@ import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Arrays;
 
-public class User{
+public abstract class User{
     public int id;
     public String name;
     public String email;
@@ -20,13 +20,7 @@ public class User{
         this.hashingPassword = SecurityUtils.encryptPassword(password, SecurityUtils.salt);
     }
 
-    public void display(User user){
-        System.out.println("=====> User " + this.id + " <=====");
-        System.out.println("Name: " + this.name);
-        System.out.println("E-mail: " + this.email);
-        if (user instanceof Customer)
-            System.out.println("Address: " + ((Customer)user).address);
-    }
+    public abstract void display();
 
     public void menu(User currentUser, HashMap<String, User> users, HashMap<Integer, Product> allProducts) throws Exception{
         System.out.println("Late binding.");
@@ -59,13 +53,6 @@ public class User{
                 return true;
         return false;
     }
-
-    // public void menu (User currentUser, Vector<User> users, Vector<Product> products) throws Exception{
-    //     if (currentUser instanceof Customer)
-    //         ((Customer)currentUser).customerMenu(products);
-    //     else if (currentUser instanceof Admin)
-    //         ((Admin)currentUser).adminMenu(users);
-    // }
 
     // public User createDefaltAdmin(String name, String email, String password){
     //     User firstAdmin = new Admin("Default Account", "admin", encryptPassword("admin"));
