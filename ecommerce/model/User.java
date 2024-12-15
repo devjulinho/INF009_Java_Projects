@@ -53,6 +53,6 @@ public abstract class User implements Serializable{
     }
 
     public static void createDefaultAdmin(HashMap<String, User> users) throws Exception{
-        users.put("admin@ecommerce.com", new Admin("Default Account", "admin@ecommerce.com", "admin"));
+        users.put("admin@ecommerce.com", new Admin("Default Account", "admin", "admin"));
     }
 }

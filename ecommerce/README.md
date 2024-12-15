@@ -10,6 +10,9 @@ This ecommerce project has two types of users: Administrator and Customer. A cus
 1. Go to the INF008 directory;
 2. Compile all arquives using: "javac ecommerce/*/*.java";
 3. Execute the program using: "java ecommerce.main.Main";
+4. First login:
+    Login: admin@ecommerce.com
+    Password: admin
 
 ## Versions
 ```
