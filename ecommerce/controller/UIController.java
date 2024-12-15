@@ -44,6 +44,7 @@ public class UIController{
         return loginUser;
     }
 
+    @SuppressWarnings("unchecked")
      public static int adminMenu(User currentUser, HashMap<String, User> users, HashMap<Integer, Product> allProducts) throws Exception{
         Scanner option = new Scanner(System.in);
         int menuOption = 0;
@@ -284,8 +285,10 @@ public class UIController{
                     System.out.println("Please, inform the id:");
                     int productId = askInfo.nextInt();
                     product = Product.getProductById(allProducts, productId);
-                    if(product != null)
+                    if(product != null){
+                        System.out.println("\t ID \t | \t NAME \t | \t PRICE \t | \t AMOUNT \t |");
                         product.display();
+                        }
                     else
                         System.out.println("We don't have that product id!");
                     System.out.println("Press enter to return to menu:");

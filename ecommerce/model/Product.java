@@ -28,14 +28,11 @@ public class Product implements Serializable{
     }
 
     public void display(){
-        System.out.println("******* Product id: " + this.id + "*******");
-        System.out.println("Name: " + this.name);
-        System.out.println("Price: $" + this.price);
-        System.out.println("Amount: " + this.amount);
-        System.out.println("\n");
+        System.out.println("\t " + this.id + " \t | \t " + this.name + " \t | \t " + this.price + " \t | \t " + this.amount + " \t |");
     }
 
     public static void displayAllAvailableProducts(HashMap<Integer, Product> allProducts){
+        System.out.println("\t ID \t | \t NAME \t | \t PRICE \t | \t AMOUNT \t |");
         allProducts.entrySet().stream()
                               .filter(entry -> entry.getValue().amount > 0)
                               .forEach(entry -> entry.getValue().display());
@@ -47,6 +44,7 @@ public class Product implements Serializable{
     }
 
     public static void lowestInventory(HashMap<Integer, Product> allProducts){
+        System.out.println("\t ID \t | \t NAME \t | \t PRICE \t | \t AMOUNT \t |");
         allProducts.entrySet().stream()
                               .filter(entry -> entry.getValue().amount < 10)
                               .forEach(entry -> entry.getValue().display());

@@ -28,5 +28,4 @@ public class SecurityUtils{
 
         return hash;
     }
-
 }

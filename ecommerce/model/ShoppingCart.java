@@ -20,7 +20,9 @@ public class ShoppingCart implements Serializable{
         System.out.println("Number of orders -> " + orders.size());
         System.out.println("Total to pay -> $" + getTotalPrice(allProducts));
         System.out.println("_________________________");
+        System.out.println("\t ID \t | \t NAME \t | \t AMOUNT \t | \t ORDER VALUE \t |");
         orders.forEach(o -> o.display(allProducts));
+        System.out.println("\n");
     }
 
     public static boolean removeOrderById(Customer currentUser, int id){
@@ -63,7 +65,6 @@ public class ShoppingCart implements Serializable{
         }
         return unavailableProducts;
     }
-
 
     public static void finishOrder(Customer currentUser, HashMap<Integer, Product> allProducts){
         Product product = null;

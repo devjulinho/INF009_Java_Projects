@@ -19,15 +19,10 @@ public class Order implements Serializable{
 
     public void display(HashMap<Integer, Product> allProducts){
         Product product = Product.getProductById(allProducts, this.productId);
-        System.out.println("Order id: " + this.id);
-        System.out.println("Product: " + product.name);
-        System.out.println("Amount in this order: " + this.orderedAmount);
-        System.out.println("Order value: $" + this.orderedAmount * product.price);
-        System.out.println("\n");
+        System.out.println("\t " + this.id + " \t | \t " + product.name + " \t | \t " + this.orderedAmount + " \t | \t $" + this.orderedAmount * product.price + "\t |");
     }
 
     public static void createNewOrder(Customer currentUser, int id, int orderedAmount){
         currentUser.currentShoppingCart.orders.add(new Order(id, orderedAmount));
     }
-
 }
