@@ -1,0 +1,8 @@
+/home/julio/Desktop/INF008/library-system/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IAuthenticationController.java
+/home/julio/Desktop/INF008/library-system/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IBookController.java
+/home/julio/Desktop/INF008/library-system/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/ICore.java
+/home/julio/Desktop/INF008/library-system/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IIOController.java
+/home/julio/Desktop/INF008/library-system/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/ILibCollectionController.java
+/home/julio/Desktop/INF008/library-system/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IPlugin.java
+/home/julio/Desktop/INF008/library-system/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IPluginController.java
+/home/julio/Desktop/INF008/library-system/microkernel/interfaces/src/main/java/br/edu/ifba/inf008/interfaces/IUIController.java

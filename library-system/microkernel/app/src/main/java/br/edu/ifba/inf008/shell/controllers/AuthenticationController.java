@@ -1,4 +1,4 @@
-package br.edu.ifba.inf008.shell;
+package br.edu.ifba.inf008.shell.controllers;
 
 import br.edu.ifba.inf008.interfaces.IAuthenticationController;
 
