@@ -2,6 +2,7 @@ br/edu/ifba/inf008/interfaces/IAuthenticationController.class
 br/edu/ifba/inf008/interfaces/IPlugin.class
 br/edu/ifba/inf008/interfaces/IIOController.class
 br/edu/ifba/inf008/interfaces/ILibCollectionController.class
+br/edu/ifba/inf008/interfaces/IUserController.class
 br/edu/ifba/inf008/interfaces/ICore.class
 br/edu/ifba/inf008/interfaces/IBookController.class
 br/edu/ifba/inf008/interfaces/IUIController.class

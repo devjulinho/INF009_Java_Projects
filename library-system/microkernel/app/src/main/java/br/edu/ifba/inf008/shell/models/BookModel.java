@@ -3,8 +3,8 @@ package br.edu.ifba.inf008.shell.models;
 import java.io.Serializable;
 
 public class BookModel extends LibCollectionModel implements Serializable{
-    String isbn;
-    String genre;
+    protected String isbn;
+    protected String genre;
 
     public BookModel(String isbn, String title, String author, int releaseYear, String genre){
         super(title, author, releaseYear);

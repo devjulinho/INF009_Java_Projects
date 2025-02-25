@@ -5,6 +5,12 @@
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/IOController.java
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/LibCollectionController.java
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/PluginController.java
+/home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/UIBookController.java
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/UIController.java
+/home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/UILoanController.java
+/home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/UIReportsController.java
+/home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/UIUserController.java
+/home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/UserController.java
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/models/BookModel.java
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/models/LibCollectionModel.java
+/home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/models/UserModel.java

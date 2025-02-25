@@ -13,4 +13,8 @@ public class BookController extends LibCollectionController implements IBookCont
         books.add(new BookModel(isbn, title, author, releaseYear, genre));
     }
 
+    public static int booksSize(){
+        return books.size();
+    }
+
 }
