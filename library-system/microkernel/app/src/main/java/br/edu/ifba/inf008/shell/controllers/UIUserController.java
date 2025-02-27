@@ -1,5 +1,6 @@
 package br.edu.ifba.inf008.shell.controllers;
 
+import br.edu.ifba.inf008.shell.models.BookModel;
 import br.edu.ifba.inf008.shell.models.UserModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -48,6 +49,11 @@ public class UIUserController{
 
         Button accessUserButton = new Button("Access");
         accessUserButton.setStyle("-fx-font-size: 14px; -fx-font-weight:bold;");
+
+        accessUserButton.setOnAction(e -> {
+            Stage userStage = new Stage();
+            userProfileScreen(user, userStage);
+        });
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -216,5 +222,41 @@ public class UIUserController{
         Scene scene = new Scene(vbox, 1000, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private void userProfileScreen(UserModel user, Stage userStage){
+        
+        userStage.setTitle("Salvador's Library - Users");
+
+        Label IdLabel = new Label("ID: " + user.getId());
+        IdLabel.setStyle("-fx-font-size: 16px;");
+        Label nameLabel = new Label("Name: " + user.getName());
+        nameLabel.setStyle("-fx-font-size: 16px;");
+        Label borrowedBooksLabel = new Label("\nBorrowed Books:\n");
+        borrowedBooksLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+        FlowPane flowPane = new FlowPane();
+        flowPane.setPadding(new Insets(10));
+        flowPane.setHgap(10);
+        flowPane.setVgap(10);
+        flowPane.setAlignment(Pos.CENTER_LEFT);
+
+        for (BookModel book : user.getBorrowedBooks()) {
+            VBox card = UIBookController.getInstance().createSmallCard(book);
+            flowPane.getChildren().add(card);
+        }
+
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> userStage.close());
+        HBox backButtonBox = new HBox(10, backButton);
+        backButtonBox.setAlignment(Pos.CENTER);
+
+        VBox layout = new VBox(10, IdLabel, nameLabel, borrowedBooksLabel, flowPane, backButtonBox);
+        layout.setPadding(new javafx.geometry.Insets(15));
+
+        Scene scene = new Scene(layout, 800, 550);
+        userStage.setTitle("User Details");
+        userStage.setScene(scene);
+        userStage.show();
     }
 }

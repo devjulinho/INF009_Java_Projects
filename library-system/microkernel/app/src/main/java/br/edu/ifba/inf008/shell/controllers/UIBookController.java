@@ -40,7 +40,7 @@ public class UIBookController{
         return instance;
     }
 
-    private VBox createCard(BookModel book) {
+    public VBox createCard(BookModel book) {
 
         Label labelTitle = new Label("Title: " + book.getTitle());
         labelTitle.setFont(Font.font(16));
@@ -70,6 +70,27 @@ public class UIBookController{
         card.setMaxWidth(250); // Largura máxima
         card.setMinHeight(180); // Altura mínima
         card.setMaxHeight(180); // Altura máxima
+
+        card.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        card.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
+
+        return card;
+    }
+
+    public VBox createSmallCard(BookModel book) {
+
+        Label labelText = new Label("Title: " + book.getTitle() + " (" + book.getReleaseYear() + ") - " + book.getAuthor());
+        labelText.setFont(Font.font(16));
+        labelText.setTextFill(Color.DARKBLUE);
+
+        VBox card = new VBox(10, labelText);
+        card.setAlignment(Pos.CENTER);
+        card.setPadding(new Insets(10));
+
+        card.setMinWidth(750); // Largura mínima
+        card.setMaxWidth(750); // Largura máxima
+        card.setMinHeight(60); // Altura mínima
+        card.setMaxHeight(60); // Altura máxima
 
         card.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         card.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));

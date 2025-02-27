@@ -7,12 +7,11 @@ public class UserModel implements Serializable{
     public static int referenceId = 0;
     protected int id;
     protected String name;
-    protected ArrayList<BookModel> borrowedBooks;
+    public ArrayList<BookModel> borrowedBooks = new ArrayList<>();
 
     public UserModel(String name){
         this.id = referenceId++;
         this.name = name;
-        this.borrowedBooks = null;
     }
 
     public String getName(){
@@ -21,5 +20,9 @@ public class UserModel implements Serializable{
 
     public int getId(){
         return this.id;
+    }
+
+    public ArrayList<BookModel> getBorrowedBooks(){
+        return borrowedBooks;
     }
 }
