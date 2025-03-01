@@ -25,4 +25,9 @@ public class UserModel implements Serializable{
     public ArrayList<BookModel> getBorrowedBooks(){
         return borrowedBooks;
     }
+
+    @Override
+    public String toString(){
+        return this.name + " (" + this.id + ")";
+    }
 }

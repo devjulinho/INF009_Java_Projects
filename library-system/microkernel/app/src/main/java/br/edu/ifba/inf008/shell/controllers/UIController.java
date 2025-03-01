@@ -54,24 +54,24 @@ public class UIController extends Application implements IUIController
 
         Button booksButton = new Button("Books");
         Button usersButton = new Button("Users");
-        Button button3 = new Button("Loans");
+        Button loanButton = new Button("Loans");
         Button button4 = new Button("Reports");
         Button button5 = new Button("Exit");
 
         booksButton.setMinSize(300, 120);
         usersButton.setMinSize(300, 120);
-        button3.setMinSize(300, 120);
+        loanButton.setMinSize(300, 120);
         button4.setMinSize(300, 120);
         button5.setMinSize(200, 50);
 
         booksButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         usersButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        button3.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        loanButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         button4.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         HBox row1 = new HBox(10, booksButton, usersButton);
         row1.setAlignment(Pos.CENTER);
-        HBox row2 = new HBox(10, button3, button4);
+        HBox row2 = new HBox(10, loanButton, button4);
         row2.setAlignment(Pos.CENTER);
         VBox.setMargin(button5, new Insets(20, 0, 0, 0));
         vbox.getChildren().addAll(title, row1, row2, button5);
@@ -82,6 +82,10 @@ public class UIController extends Application implements IUIController
 
         usersButton.setOnAction(e -> {
             UIUserController.getInstance().userHomeScreen(primaryStage);
+        });
+
+        loanButton.setOnAction(e -> {
+            UILoanController.getInstance().loanHomeScreen(primaryStage);
         });
 
         button5.setOnAction(e -> {

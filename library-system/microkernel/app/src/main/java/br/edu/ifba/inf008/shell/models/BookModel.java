@@ -31,4 +31,9 @@ public class BookModel extends LibCollectionModel implements Serializable{
         public String getGenre(){
         return this.genre;
     }
+
+    @Override
+    public String toString(){
+        return this.title + " (" + this.releaseYear + ") - " + this.author; 
+    }
 }

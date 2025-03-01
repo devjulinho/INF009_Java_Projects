@@ -6,10 +6,12 @@ public class LibCollectionModel implements Serializable{
     protected String title;
     protected String author;
     protected int releaseYear;
+    public boolean available;
 
     public LibCollectionModel(String title, String author, int releaseYear){
         this.title = title;
         this.author = author;
         this.releaseYear = releaseYear;
+        this.available = true;
     }
 }

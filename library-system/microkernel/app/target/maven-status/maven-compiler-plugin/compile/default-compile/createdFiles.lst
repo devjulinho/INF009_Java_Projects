@@ -2,11 +2,14 @@ br/edu/ifba/inf008/App.class
 br/edu/ifba/inf008/shell/models/LibCollectionModel.class
 br/edu/ifba/inf008/shell/controllers/UIUserController.class
 br/edu/ifba/inf008/shell/controllers/UIController.class
+br/edu/ifba/inf008/shell/controllers/LoanController.class
 br/edu/ifba/inf008/shell/controllers/UIBookController.class
 br/edu/ifba/inf008/shell/controllers/PluginController.class
+br/edu/ifba/inf008/shell/controllers/UILoanController.class
 br/edu/ifba/inf008/shell/controllers/IOController.class
 br/edu/ifba/inf008/shell/models/UserModel.class
 br/edu/ifba/inf008/shell/models/BookModel.class
+br/edu/ifba/inf008/shell/models/LoanModel.class
 br/edu/ifba/inf008/shell/controllers/BookController.class
 br/edu/ifba/inf008/shell/controllers/PluginController$1.class
 br/edu/ifba/inf008/shell/Core.class
