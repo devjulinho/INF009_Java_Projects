@@ -1,13 +1,17 @@
 package br.edu.ifba.inf008.shell.controllers;
 
+import java.time.LocalDate;
+
 import br.edu.ifba.inf008.shell.models.BookModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -66,10 +70,10 @@ public class UIBookController{
         card.setAlignment(Pos.CENTER);
         card.setPadding(new Insets(10));
 
-        card.setMinWidth(250); // Largura mínima
-        card.setMaxWidth(250); // Largura máxima
-        card.setMinHeight(180); // Altura mínima
-        card.setMaxHeight(180); // Altura máxima
+        card.setMinWidth(250);
+        card.setMaxWidth(250);
+        card.setMinHeight(180);
+        card.setMaxHeight(180);
 
         card.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         card.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
@@ -87,10 +91,10 @@ public class UIBookController{
         card.setAlignment(Pos.CENTER);
         card.setPadding(new Insets(10));
 
-        card.setMinWidth(750); // Largura mínima
-        card.setMaxWidth(750); // Largura máxima
-        card.setMinHeight(60); // Altura mínima
-        card.setMaxHeight(60); // Altura máxima
+        card.setMinWidth(750);
+        card.setMaxWidth(750);
+        card.setMinHeight(60);
+        card.setMaxHeight(60);
 
         card.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         card.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
@@ -109,31 +113,31 @@ public class UIBookController{
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
         VBox.setMargin(title, new Insets(0, 0, 30, 0));
 
-        Button button1 = new Button("Register a new book");
-        Button button2 = new Button("All registered books");
-        Button button3 = new Button("Back");
+        Button registerNewBookButton = new Button("Register a new book");
+        Button allBooksButton = new Button("All registered books");
+        Button exitButton = new Button("Back");
 
-        button1.setMinSize(300, 120);
-        button2.setMinSize(300, 120);
-        button3.setMinSize(200, 50);
+        registerNewBookButton.setMinSize(300, 120);
+        allBooksButton.setMinSize(300, 120);
+        exitButton.setMinSize(200, 50);
 
-        button1.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        button2.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        registerNewBookButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        allBooksButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-        HBox row1 = new HBox(10, button1, button2);
+        HBox row1 = new HBox(10, registerNewBookButton, allBooksButton);
         row1.setAlignment(Pos.CENTER);
-        VBox.setMargin(button3, new Insets(20, 0, 0, 0));
-        vbox.getChildren().addAll(title, row1, button3);
+        VBox.setMargin(exitButton, new Insets(20, 0, 0, 0));
+        vbox.getChildren().addAll(title, row1, exitButton);
 
-        button1.setOnAction(e -> {
+        registerNewBookButton.setOnAction(e -> {
             registerBookScreen(primaryStage);
         });
 
-        button2.setOnAction(e -> {
+        allBooksButton.setOnAction(e -> {
             allRegisteredBooksScreen(primaryStage);
         });
 
-        button3.setOnAction(e -> {
+        exitButton.setOnAction(e -> {
             UIController.getInstance().start(primaryStage);
         });
 
@@ -157,44 +161,65 @@ public class UIBookController{
 
         Label label1 = new Label("ISBN:");
         label1.setStyle("-fx-font-size: 16px;");
-        TextField field1 = new TextField();
+        TextField isbnField = new TextField();
         grid.add(label1, 0, 0);
-        grid.add(field1, 1, 0);
+        grid.add(isbnField, 1, 0);
 
         Label label2 = new Label("Title:");
         label2.setStyle("-fx-font-size: 16px;");
-        TextField field2 = new TextField();
+        TextField titleField = new TextField();
         grid.add(label2, 0, 1);
-        grid.add(field2, 1, 1);
+        grid.add(titleField, 1, 1);
 
         Label label3 = new Label("Author(s):");
         label3.setStyle("-fx-font-size: 16px;");
-        TextField field3 = new TextField();
+        TextField authorField = new TextField();
         grid.add(label3, 0, 2);
-        grid.add(field3, 1, 2);
+        grid.add(authorField, 1, 2);
 
-        Label label4 = new Label("Release Year");
+        Label label4 = new Label("Release Year:");
         label4.setStyle("-fx-font-size: 16px;");
-        TextField field4 = new TextField();
+        TextField yearField = new TextField();
+        yearField.setTextFormatter(new TextFormatter<>(change -> 
+            (change.getControlNewText().matches("\\d*")) ? change : null
+            ));
         grid.add(label4, 0, 3);
-        grid.add(field4, 1, 3);
+        grid.add(yearField, 1, 3);
 
-        Label label5 = new Label("Genre");
+        Label label5 = new Label("Genre:");
         label5.setStyle("-fx-font-size: 16px;");
-        TextField field5 = new TextField();
+        TextField genreField = new TextField();
         grid.add(label5, 0, 4);
-        grid.add(field5, 1, 4);
+        grid.add(genreField, 1, 4);
 
         Button sendButton = new Button("Send");
         sendButton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
         sendButton.setOnAction(e -> {
-            System.out.println("Dados enviados:");
-            System.out.println("a: " + field1.getText());
-            System.out.println("b: " + field2.getText());
-            System.out.println("c: " + field3.getText());
-            System.out.println("d: " + field4.getText());
-            System.out.println("e: " + field5.getText());
+            if(
+                isbnField.getText().isBlank() || titleField.getText().isBlank() || authorField.getText().isBlank() ||
+                yearField.getText().isBlank() || genreField.getText().isBlank()
+            ){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Miss information!");
+                alert.setHeaderText(null);
+                alert.setContentText("There's some blank information.");
+                alert.showAndWait();
+            } else if (Integer.parseInt(yearField.getText()) < 0 || Integer.parseInt(yearField.getText()) > LocalDate.now().getYear()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Miss information!");
+                alert.setHeaderText(null);
+                alert.setContentText("The release year must be between 0 or " + LocalDate.now().getYear() + ".");
+                alert.showAndWait();
+            } 
+            else {
+                BookController.addNewBook(isbnField.getText(), titleField.getText(), authorField.getText(), Integer.parseInt(yearField.getText()), genreField.getText());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Successful registration");
+                alert.setHeaderText(null);
+                alert.setContentText("The book " + titleField.getText() + " was successfuly registrated.");
+                alert.showAndWait();
+            }
         });
 
         Button backButton = new Button("Back");
@@ -235,22 +260,22 @@ public class UIBookController{
         HBox.setHgrow(rightSpacer, Priority.ALWAYS);
         header.getChildren().addAll(backButton, centerSpacer, title, rightSpacer);
 
-        BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("NomeDisp1", "NomeDisp1", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("NomeDisp2", "NomeDisp2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
+        // BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
 
         FlowPane flowPane = new FlowPane();
         flowPane.setPadding(new Insets(10));
