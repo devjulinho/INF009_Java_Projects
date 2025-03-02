@@ -34,7 +34,7 @@ public class BookModel extends LibCollectionModel implements Serializable, IBook
         return this.genre;
     }
 
-    public boolean getAvailability(){
+    public boolean isAvailable(){
         return this.available;
     }
 

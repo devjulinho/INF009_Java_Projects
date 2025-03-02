@@ -264,24 +264,6 @@ public class UIBookController{
         HBox.setHgrow(rightSpacer, Priority.ALWAYS);
         header.getChildren().addAll(backButton, centerSpacer, title, rightSpacer);
 
-        BookController.addNewBook("NomeDisp1", "a", "Nome3", 1000, "Nome4");
-        BookController.books.get(0).available = false;
-        BookController.addNewBook("NomeDisp2", "NomeDisp2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome3", "b", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome4", "c", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome1", "d", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome2", "e", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome3", "f", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome3", "x", "Nome3", 1000, "Nome4");
-        BookController.addNewBook("Nome4", "z", "Nome3", 1000, "Nome4");
-
         FlowPane flowPane = new FlowPane();
         flowPane.setPadding(new Insets(10));
         flowPane.setHgap(10);

@@ -32,7 +32,7 @@ public class UIReportsController implements IUIReportsController{
     }
 
     protected void reportsHomeScreen(Stage primaryStage){
-        primaryStage.setTitle("Salvador's Library - Books");
+        primaryStage.setTitle("Salvador's Library - Reports");
 
         VBox vbox = new VBox(20);
         vbox.setAlignment(Pos.CENTER);
@@ -52,6 +52,7 @@ public class UIReportsController implements IUIReportsController{
 
         for (Button button : UIReportsController.buttons){
             row1.getChildren().add(button);
+            HBox.setMargin(button, new Insets(5));
         }
 
         exitButton.setOnAction(e -> {

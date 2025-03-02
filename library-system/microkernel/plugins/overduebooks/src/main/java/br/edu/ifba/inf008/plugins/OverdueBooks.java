@@ -2,9 +2,10 @@ package br.edu.ifba.inf008.plugins;
 
 import java.util.ArrayList;
 
-import br.edu.ifba.inf008.interfaces.IBookController;
 import br.edu.ifba.inf008.interfaces.IBookModel;
 import br.edu.ifba.inf008.interfaces.ICore;
+import br.edu.ifba.inf008.interfaces.ILoanController;
+import br.edu.ifba.inf008.interfaces.ILoanModel;
 import br.edu.ifba.inf008.interfaces.IPlugin;
 import br.edu.ifba.inf008.interfaces.IUIReportsController;
 import javafx.collections.FXCollections;
@@ -34,34 +35,41 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class BorrowedBooks implements IPlugin{
+public class OverdueBooks implements IPlugin{
 
-    public IBookController bookController = ICore.getInstance().getBookController();
-    public ArrayList<IBookModel> books = bookController.getAllBooks();
+    public ILoanController loanController = ICore.getInstance().getLoanController();
+    public ArrayList<ILoanModel> loans = loanController.getAllLoans();
 
     public boolean init() {
 
         IUIReportsController uiReportsController = ICore.getInstance().getUIReportsController();
         Stage newStage = new Stage();
-        Button newButton = uiReportsController.createButton("All Borrowed Books", () -> borrowedBooksScreen(newStage));
+        Button newButton = uiReportsController.createButton("Teste", () -> borrowedBooksScreen(newStage));
 
         return true;
     }
 
-    public HBox createSmallCard(IBookModel book) {
+    public VBox createSmallCard(ILoanModel loan, IBookModel book) {
+        Label labelTitle = new Label("Title: " + book.getTitle() + " (" + book.getReleaseYear() + ") - " + book.getAuthor());
+        labelTitle.setFont(Font.font(16));
+        labelTitle.setTextFill(Color.DARKBLUE);
 
-        Label labelText = new Label("Title: " + book.getTitle() + " (" + book.getReleaseYear() + ") - " + book.getAuthor());
-        labelText.setFont(Font.font(16));
-        labelText.setTextFill(Color.DARKBLUE);
+        Label labelUser = new Label("User: " + loan.getUserName());
+        labelUser.setFont(Font.font(14));
+        labelUser.setTextFill(Color.DARKBLUE);
 
-        HBox card = new HBox(10, labelText);
+        Label labelDays = new Label("Days late: " + loan.amountOfLateDays() + "   |   Fine amount: $ " + String.format("%.2f", loan.getFineAmount()));
+        labelDays.setFont(Font.font(14));
+        labelDays.setTextFill(Color.DARKBLUE);
+
+        VBox card = new VBox(10, labelTitle, labelUser, labelDays);
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(10));
 
         card.setMinWidth(750);
         card.setMaxWidth(750);
-        card.setMinHeight(80);
-        card.setMaxHeight(80);
+        card.setMinHeight(100);
+        card.setMaxHeight(100);
 
         card.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         card.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
@@ -70,9 +78,9 @@ public class BorrowedBooks implements IPlugin{
     }
 
     private void borrowedBooksScreen(Stage newStage){
-        newStage.setTitle("Borrowed Books");
+        newStage.setTitle("Overdue Books");
 
-        Text title = new Text("Borrowed Books");
+        Text title = new Text("Overdue Books");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         Button backButton = new Button("Back");
@@ -98,12 +106,16 @@ public class BorrowedBooks implements IPlugin{
         flowPane.setVgap(10);
         flowPane.setAlignment(Pos.CENTER);
 
-        ObservableList<IBookModel> bookList = FXCollections.observableArrayList(this.books);
-        FilteredList<IBookModel> filteredBooks = new FilteredList<>(bookList, b -> !b.isAvailable());
+        ObservableList<ILoanModel> loanList = FXCollections.observableArrayList(this.loans);
+        FilteredList<ILoanModel> filteredLoans = new FilteredList<>(loanList, l -> l.isLate() && l.getFinalDate() == null);
 
-        for (IBookModel book : filteredBooks) {
-            HBox card = createSmallCard(book);
-            flowPane.getChildren().add(card);
+        for (ILoanModel loan : filteredLoans) {
+            ArrayList<IBookModel> books = loan.getBorrowedBooks();
+
+            for (IBookModel book : books){
+                VBox card = createSmallCard(loan, book);
+                flowPane.getChildren().add(card);
+            }
         }
 
         ScrollPane scrollPane = new ScrollPane(flowPane);

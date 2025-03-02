@@ -207,12 +207,11 @@ public class UILoanController{
             selectedBooksCount < 1 || selectedBooksCount > 5);
         });
 
-        LocalDate loanDate = loanDatePicker.getValue();
-
         VBox loanDateBox = new VBox(10, loanDateLabel, loanDatePicker);
         loanDateBox.setAlignment(Pos.CENTER);
         
         loanButton.setOnAction(e -> {
+            LocalDate loanDate = loanDatePicker.getValue();
             ArrayList<BookModel> selectedBooks = new ArrayList(bookListView.getSelectionModel().getSelectedItems());
             UserModel selectedUser = userListView.getSelectionModel().getSelectedItem();
 

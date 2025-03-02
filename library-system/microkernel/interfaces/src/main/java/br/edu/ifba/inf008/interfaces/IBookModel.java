@@ -12,7 +12,7 @@ public interface IBookModel{
 
     public String getGenre();
 
-    public boolean getAvailability();
+    public boolean isAvailable();
 
     @Override
     public String toString();

@@ -9,6 +9,15 @@ import br.edu.ifba.inf008.shell.models.LoanModel;
 import br.edu.ifba.inf008.shell.models.UserModel;
 
 public class LoanController implements ILoanController{
+    public static LoanController instance;
+
+    public static LoanController getInstance(){
+        if(instance == null)
+            instance = new LoanController();
+        return instance;
+    }
+    
+    
     public static ArrayList<LoanModel> loans = new ArrayList<>();
 
     public static void addNewLoan(UserModel user, ArrayList<BookModel> books, LocalDate date){
@@ -26,5 +35,9 @@ public class LoanController implements ILoanController{
         for(BookModel book : loan.books){
             book.available = true;
         }
+    }
+
+    public ArrayList<LoanModel> getAllLoans(){
+        return loans;
     }
 }

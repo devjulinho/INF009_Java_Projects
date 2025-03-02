@@ -13,6 +13,7 @@
         <module>app</module>
         <module>plugins/myplugin</module>
         <module>plugins/borrowedbooks</module>
+        <module>plugins/overduebooks</module>
     </modules>
 
     <properties>
