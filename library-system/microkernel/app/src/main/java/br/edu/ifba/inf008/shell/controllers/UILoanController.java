@@ -145,6 +145,7 @@ public class UILoanController{
         
         Label loanDateLabel = new Label("Loan Date:");
         DatePicker loanDatePicker = new DatePicker();
+        loanDatePicker.setEditable(false);
         loanDatePicker.setValue(LocalDate.now());
         
         Label titleLabel = new Label("Select a book and a user:");
@@ -279,7 +280,7 @@ public class UILoanController{
         searchField.setStyle("-fx-font-size: 14px;");
 
         ObservableList<LoanModel> loanList = FXCollections.observableArrayList(LoanController.loans);
-        FilteredList<LoanModel> filteredLoans = new FilteredList<>(loanList, loan -> true);
+        FilteredList<LoanModel> filteredLoans = new FilteredList<>(loanList, loan -> loan.finalDate == null);
 
         FlowPane flowPane = new FlowPane();
         flowPane.setPadding(new Insets(10));
@@ -299,9 +300,9 @@ public class UILoanController{
 
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredLoans.setPredicate(loan ->
-                newValue == null || newValue.isEmpty() ||
-                loan.user.getName().toLowerCase().contains(newValue.toLowerCase()) ||
-                loan.allBooksToString().toLowerCase().contains(newValue.toLowerCase())
+                newValue == null || newValue.isEmpty() && loan.finalDate == null ||
+                loan.user.getName().toLowerCase().contains(newValue.toLowerCase()) && loan.finalDate == null ||
+                loan.allBooksToString().toLowerCase().contains(newValue.toLowerCase()) && loan.finalDate == null
             );
             updateLoanView.run();
         });
@@ -335,6 +336,7 @@ public class UILoanController{
         label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         DatePicker datePicker = new DatePicker();
+        datePicker.setEditable(false);
         datePicker.setValue(LocalDate.now());
 
         Button sendButton = new Button("Send");
@@ -342,11 +344,23 @@ public class UILoanController{
 
         sendButton.setOnAction(e -> {
             LocalDate selectedDate = datePicker.getValue();
-            loan.finalDate = selectedDate;
-            loan.user.borrowedBooks.removeAll(loan.books);
             
-            for(BookModel book : loan.books){
-                book.available = true;
+            if(selectedDate.isBefore(loan.startDate)){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Miss information!");
+                alert.setHeaderText(null);
+                alert.setContentText("This date is before the day that the book was borrowed. Please, inform a valid date.");
+                alert.showAndWait();
+            } else {
+                LoanController.finishLoan(loan, selectedDate);
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Loan Registrated!");
+                alert.setHeaderText(null);
+                alert.setContentText("All books are available now.");
+                alert.showAndWait();
+
+                returnStage.close();
             }
         });
 

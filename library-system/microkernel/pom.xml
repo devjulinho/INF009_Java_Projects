@@ -12,6 +12,7 @@
         <module>interfaces</module>
         <module>app</module>
         <module>plugins/myplugin</module>
+        <module>plugins/borrowedbooks</module>
     </modules>
 
     <properties>

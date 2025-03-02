@@ -198,15 +198,6 @@ public class UIUserController{
         HBox.setHgrow(rightSpacer, Priority.ALWAYS);
         header.getChildren().addAll(backButton, centerSpacer, title, rightSpacer);
 
-        // UserController.addUser("Nome1");
-        // UserController.addUser("Nome1");
-        // UserController.addUser("Nome1");
-        // UserController.addUser("Nome1");
-        // UserController.addUser("Nome1");
-        // UserController.addUser("Nome1");
-        // UserController.addUser("Nome1");
-        // UserController.addUser("Nome1");
-
         FlowPane flowPane = new FlowPane();
         flowPane.setPadding(new Insets(10));
         flowPane.setHgap(10);
@@ -246,7 +237,7 @@ public class UIUserController{
         IdLabel.setStyle("-fx-font-size: 16px;");
         Label nameLabel = new Label("Name: " + user.getName());
         nameLabel.setStyle("-fx-font-size: 16px;");
-        Label borrowedBooksLabel = new Label("\nBorrowed Books:\n");
+        Label borrowedBooksLabel = new Label("\nBorrowed Books: \t\t\t Fine: $ " + String.format("%.2f", user.getFine()) + "\n");
         borrowedBooksLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         FlowPane flowPane = new FlowPane();

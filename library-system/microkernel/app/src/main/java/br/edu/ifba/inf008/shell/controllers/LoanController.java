@@ -14,4 +14,17 @@ public class LoanController implements ILoanController{
     public static void addNewLoan(UserModel user, ArrayList<BookModel> books, LocalDate date){
         loans.add(new LoanModel(user, books, date));
     }
+
+    public static void finishLoan(LoanModel loan, LocalDate finishDate){       
+        if (finishDate.isAfter(loan.devolutionDate)){
+            UserController.applyFine(loan.user, loan.startDate, finishDate, loan.books.size());
+        }
+            
+        loan.finalDate = finishDate;
+        loan.user.borrowedBooks.removeAll(loan.books);
+        
+        for(BookModel book : loan.books){
+            book.available = true;
+        }
+    }
 }

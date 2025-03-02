@@ -2,6 +2,7 @@ package br.edu.ifba.inf008.shell.controllers;
 
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IUIController;
+import br.edu.ifba.inf008.shell.Core;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -25,6 +26,7 @@ public class UIController extends Application implements IUIController
     private MenuBar menuBar;
     private TabPane tabPane;
     private static UIController uiController;
+    private boolean flag = false;
 
     public UIController() {
     }
@@ -51,49 +53,42 @@ public class UIController extends Application implements IUIController
         Text title = new Text("Welcome to Salvador's Library!");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
         VBox.setMargin(title, new Insets(0, 0, 30, 0));
-
-        Button booksButton = new Button("Books");
-        Button usersButton = new Button("Users");
-        Button loanButton = new Button("Loans");
-        Button button4 = new Button("Reports");
+        
+        Button booksButton = createButton("Books", () -> UIBookController.getInstance().bookHomeScreen(primaryStage));
+        Button usersButton = createButton("Users", () -> UIUserController.getInstance().userHomeScreen(primaryStage));
+        Button loanButton = createButton("Loan", () -> UILoanController.getInstance().loanHomeScreen(primaryStage));
+        Button reportButton = createButton("Report", () -> UIReportsController.getInstance().reportsHomeScreen(primaryStage));
         Button button5 = new Button("Exit");
 
-        booksButton.setMinSize(300, 120);
-        usersButton.setMinSize(300, 120);
-        loanButton.setMinSize(300, 120);
-        button4.setMinSize(300, 120);
         button5.setMinSize(200, 50);
-
-        booksButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        usersButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        loanButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        button4.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         HBox row1 = new HBox(10, booksButton, usersButton);
         row1.setAlignment(Pos.CENTER);
-        HBox row2 = new HBox(10, loanButton, button4);
+        HBox row2 = new HBox(10, loanButton, reportButton);
         row2.setAlignment(Pos.CENTER);
         VBox.setMargin(button5, new Insets(20, 0, 0, 0));
         vbox.getChildren().addAll(title, row1, row2, button5);
-
-        booksButton.setOnAction(e -> {
-            UIBookController.getInstance().bookHomeScreen(primaryStage);
-        });
-
-        usersButton.setOnAction(e -> {
-            UIUserController.getInstance().userHomeScreen(primaryStage);
-        });
-
-        loanButton.setOnAction(e -> {
-            UILoanController.getInstance().loanHomeScreen(primaryStage);
-        });
 
         button5.setOnAction(e -> {
             Platform.exit();
         });
 
+        if (flag == false){
+            Core.getInstance().getPluginController().init();
+            this.flag = true;
+        }
+
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public Button createButton(String buttonName, Runnable action){
+        Button newButton = new Button(buttonName);
+        newButton.setMinSize(300, 120);
+        newButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        newButton.setOnAction(e -> action.run());
+
+        return newButton;
     }
 
     public MenuItem createMenuItem(String menuText, String menuItemText) {

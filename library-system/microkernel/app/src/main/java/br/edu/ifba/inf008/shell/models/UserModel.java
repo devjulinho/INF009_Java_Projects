@@ -28,6 +28,10 @@ public class UserModel implements Serializable{
         return borrowedBooks;
     }
 
+    public double getFine(){
+        return fine;
+    }
+
     @Override
     public String toString(){
         return this.name + " (" + this.id + ")";

@@ -10,6 +10,7 @@ public abstract class ICore
     public abstract IAuthenticationController getAuthenticationController();
     public abstract IIOController getIOController();
     public abstract IPluginController getPluginController();
+    public abstract IUIReportsController getUIReportsController();
 
     protected static ICore instance = null;
 }

@@ -6,5 +6,6 @@ br/edu/ifba/inf008/interfaces/ILoanController.class
 br/edu/ifba/inf008/interfaces/IUserController.class
 br/edu/ifba/inf008/interfaces/ICore.class
 br/edu/ifba/inf008/interfaces/IBookController.class
+br/edu/ifba/inf008/interfaces/IUIReportsController.class
 br/edu/ifba/inf008/interfaces/IUIController.class
 br/edu/ifba/inf008/interfaces/IPluginController.class

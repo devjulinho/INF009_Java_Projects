@@ -3,6 +3,7 @@ br/edu/ifba/inf008/shell/models/LibCollectionModel.class
 br/edu/ifba/inf008/shell/controllers/UIUserController.class
 br/edu/ifba/inf008/shell/controllers/UIController.class
 br/edu/ifba/inf008/shell/controllers/LoanController.class
+br/edu/ifba/inf008/shell/controllers/UIReportsController.class
 br/edu/ifba/inf008/shell/controllers/UIBookController.class
 br/edu/ifba/inf008/shell/controllers/PluginController.class
 br/edu/ifba/inf008/shell/controllers/UILoanController.class
