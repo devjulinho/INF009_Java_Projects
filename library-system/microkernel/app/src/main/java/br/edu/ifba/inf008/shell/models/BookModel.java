@@ -2,7 +2,9 @@ package br.edu.ifba.inf008.shell.models;
 
 import java.io.Serializable;
 
-public class BookModel extends LibCollectionModel implements Serializable{
+import br.edu.ifba.inf008.interfaces.IBookModel;
+
+public class BookModel extends LibCollectionModel implements Serializable, IBookModel{
     protected String isbn;
     protected String genre;
 
@@ -20,16 +22,20 @@ public class BookModel extends LibCollectionModel implements Serializable{
         return this.isbn;
     }
 
-        public String getAuthor(){
+    public String getAuthor(){
         return this.author;
     }
 
-        public int getReleaseYear(){
+    public int getReleaseYear(){
         return this.releaseYear;
     }
 
-        public String getGenre(){
+    public String getGenre(){
         return this.genre;
+    }
+
+    public boolean getAvailability(){
+        return this.available;
     }
 
     @Override

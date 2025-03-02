@@ -1,7 +1,7 @@
 package br.edu.ifba.inf008.interfaces;
 
-public interface IBookController extends ILibCollectionController{
+import java.util.ArrayList;
 
-    // void addBook(String isbn, String title, String author, int releaseYear, String genre);
-
+public interface IBookController<T> extends ILibCollectionController{
+    public ArrayList<T> getAllBooks();
 }

@@ -1,12 +1,14 @@
 package br.edu.ifba.inf008.shell;
 
 import br.edu.ifba.inf008.interfaces.IAuthenticationController;
+import br.edu.ifba.inf008.interfaces.IBookController;
 import br.edu.ifba.inf008.interfaces.ICore;
 import br.edu.ifba.inf008.interfaces.IIOController;
 import br.edu.ifba.inf008.interfaces.IPluginController;
 import br.edu.ifba.inf008.interfaces.IUIController;
 import br.edu.ifba.inf008.interfaces.IUIReportsController;
 import br.edu.ifba.inf008.shell.controllers.AuthenticationController;
+import br.edu.ifba.inf008.shell.controllers.BookController;
 import br.edu.ifba.inf008.shell.controllers.IOController;
 import br.edu.ifba.inf008.shell.controllers.PluginController;
 import br.edu.ifba.inf008.shell.controllers.UIController;
@@ -45,8 +47,13 @@ public class Core extends ICore
         return uiReportsController;
     }
 
+    public IBookController getBookController(){
+        return bookController;
+    }
+
     private IAuthenticationController authenticationController = new AuthenticationController();
     private IIOController ioController = new IOController();
     private IPluginController pluginController = new PluginController();
     private IUIReportsController uiReportsController = new UIReportsController();
+    private IBookController bookController = BookController.getInstance();
 }

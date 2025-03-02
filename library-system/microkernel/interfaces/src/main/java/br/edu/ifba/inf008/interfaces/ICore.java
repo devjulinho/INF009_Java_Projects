@@ -11,6 +11,7 @@ public abstract class ICore
     public abstract IIOController getIOController();
     public abstract IPluginController getPluginController();
     public abstract IUIReportsController getUIReportsController();
+    public abstract IBookController getBookController();
 
     protected static ICore instance = null;
 }
