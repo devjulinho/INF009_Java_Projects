@@ -23,4 +23,10 @@ public class UserController implements IUserController{
         user.fine = user.fine + ((ChronoUnit.DAYS.between(startDate, devolutionDate) - 14) * 0.5 * bookAmount);
     }
 
+    public static int getReferenceId(){
+        if (!users.isEmpty())
+            return users.get(0).getReferenceId();
+        return 0;
+    }
+
 }

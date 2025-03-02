@@ -38,13 +38,12 @@ import javafx.stage.Stage;
 public class OverdueBooks implements IPlugin{
 
     public ILoanController loanController = ICore.getInstance().getLoanController();
-    public ArrayList<ILoanModel> loans = loanController.getAllLoans();
 
     public boolean init() {
 
         IUIReportsController uiReportsController = ICore.getInstance().getUIReportsController();
         Stage newStage = new Stage();
-        Button newButton = uiReportsController.createButton("Teste", () -> borrowedBooksScreen(newStage));
+        Button newButton = uiReportsController.createButton("Overdue Books", () -> borrowedBooksScreen(newStage));
 
         return true;
     }
@@ -78,6 +77,7 @@ public class OverdueBooks implements IPlugin{
     }
 
     private void borrowedBooksScreen(Stage newStage){
+        ArrayList<ILoanModel> loans = loanController.getAllLoans();
         newStage.setTitle("Overdue Books");
 
         Text title = new Text("Overdue Books");
@@ -106,7 +106,7 @@ public class OverdueBooks implements IPlugin{
         flowPane.setVgap(10);
         flowPane.setAlignment(Pos.CENTER);
 
-        ObservableList<ILoanModel> loanList = FXCollections.observableArrayList(this.loans);
+        ObservableList<ILoanModel> loanList = FXCollections.observableArrayList(loans);
         FilteredList<ILoanModel> filteredLoans = new FilteredList<>(loanList, l -> l.isLate() && l.getFinalDate() == null);
 
         for (ILoanModel loan : filteredLoans) {

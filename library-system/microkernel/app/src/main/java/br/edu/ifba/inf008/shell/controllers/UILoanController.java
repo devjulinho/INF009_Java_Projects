@@ -212,22 +212,31 @@ public class UILoanController{
         
         loanButton.setOnAction(e -> {
             LocalDate loanDate = loanDatePicker.getValue();
-            ArrayList<BookModel> selectedBooks = new ArrayList(bookListView.getSelectionModel().getSelectedItems());
-            UserModel selectedUser = userListView.getSelectionModel().getSelectedItem();
 
-            LoanController.addNewLoan(selectedUser, selectedBooks, loanDate);
-            selectedUser.borrowedBooks.addAll(new ArrayList(bookListView.getSelectionModel().getSelectedItems()));
-            for(BookModel book : selectedBooks){
-                book.available = false;
+            if(loanDate.isAfter(LocalDate.now())){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Miss Information!");
+                alert.setHeaderText(null);
+                alert.setContentText("The date cannot be after today's date.");
+                alert.showAndWait();
+            } else{
+                ArrayList<BookModel> selectedBooks = new ArrayList(bookListView.getSelectionModel().getSelectedItems());
+                UserModel selectedUser = userListView.getSelectionModel().getSelectedItem();
+
+                LoanController.addNewLoan(selectedUser, selectedBooks, loanDate);
+                selectedUser.borrowedBooks.addAll(new ArrayList(bookListView.getSelectionModel().getSelectedItems()));
+                for(BookModel book : selectedBooks){
+                    book.available = false;
+                }
+                
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Loan Registrated!");
+                alert.setHeaderText(null);
+                alert.setContentText("The book(s) was successfully borrowed to '" + selectedUser + "'.");
+                alert.showAndWait();
+
+                loanHomeScreen(primaryStage);
             }
-            
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Loan Registrated!");
-            alert.setHeaderText(null);
-            alert.setContentText("The book(s) was successfully borrowed to '" + selectedUser + "'.");
-            alert.showAndWait();
-
-            loanHomeScreen(primaryStage);
         });
 
         backButton.setOnAction(e -> {
@@ -349,6 +358,12 @@ public class UILoanController{
                 alert.setTitle("Miss information!");
                 alert.setHeaderText(null);
                 alert.setContentText("This date is before the day that the book was borrowed. Please, inform a valid date.");
+                alert.showAndWait();
+            } else if(selectedDate.isAfter(LocalDate.now())){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Miss information!");
+                alert.setHeaderText(null);
+                alert.setContentText("The informed date can't be after today.");
                 alert.showAndWait();
             } else {
                 LoanController.finishLoan(loan, selectedDate);

@@ -7,14 +7,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -23,10 +17,9 @@ import javafx.stage.Stage;
 public class UIController extends Application implements IUIController
 {
     private ICore core;
-    private MenuBar menuBar;
-    private TabPane tabPane;
     private static UIController uiController;
-    private boolean flag = false;
+    private boolean pluginFlag = false;
+    private boolean deserializationFlag = false;
 
     public UIController() {
     }
@@ -45,6 +38,11 @@ public class UIController extends Application implements IUIController
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Salvador's Library - Home");
+
+        primaryStage.setOnCloseRequest(e ->{
+            System.out.println("Fechando");
+            IOController.getInstance().serialization();
+            });
 
         VBox vbox = new VBox(20);
         vbox.setAlignment(Pos.CENTER);
@@ -70,12 +68,18 @@ public class UIController extends Application implements IUIController
         vbox.getChildren().addAll(title, row1, row2, button5);
 
         button5.setOnAction(e -> {
+            IOController.getInstance().serialization();
             Platform.exit();
         });
 
-        if (flag == false){
+        if (pluginFlag == false){
             Core.getInstance().getPluginController().init();
-            this.flag = true;
+            this.pluginFlag = true;
+        }
+
+        if (deserializationFlag == false){
+            IOController.getInstance().deserialization();
+            this.deserializationFlag = true;
         }
 
         primaryStage.setScene(scene);
@@ -89,35 +93,5 @@ public class UIController extends Application implements IUIController
         newButton.setOnAction(e -> action.run());
 
         return newButton;
-    }
-
-    public MenuItem createMenuItem(String menuText, String menuItemText) {
-        // Criar o menu caso ele nao exista
-        Menu newMenu = null;
-        for (Menu menu : menuBar.getMenus()) {
-            if (menu.getText() == menuText) {
-                newMenu = menu;
-                break;
-            }
-        }
-        if (newMenu == null) {
-            newMenu = new Menu(menuText);
-            menuBar.getMenus().add(newMenu);
-        }
-
-        // Criar o menu item neste menu
-        MenuItem menuItem = new MenuItem(menuItemText);
-        newMenu.getItems().add(menuItem);
-
-        return menuItem;
-    }
-
-    public boolean createTab(String tabText, Node contents) {
-        Tab tab = new Tab();
-        tab.setText(tabText);
-        tab.setContent(contents);
-        tabPane.getTabs().add(tab);
-
-        return true;
     }
 }

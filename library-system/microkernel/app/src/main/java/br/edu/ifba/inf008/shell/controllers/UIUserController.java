@@ -155,7 +155,7 @@ public class UIUserController{
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Successful registration");
                 alert.setHeaderText(null);
-                alert.setContentText("The user " + nameField.getText() + " was successfuly created.");
+                alert.setContentText("The user '" + nameField.getText() + "' was successfully created.");
                 alert.showAndWait();
 
                 userHomeScreen(primaryStage);

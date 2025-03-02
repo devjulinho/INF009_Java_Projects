@@ -32,6 +32,10 @@ public class UserModel implements Serializable{
         return fine;
     }
 
+    public int getReferenceId(){
+        return referenceId;
+    }
+
     @Override
     public String toString(){
         return this.name + " (" + this.id + ")";

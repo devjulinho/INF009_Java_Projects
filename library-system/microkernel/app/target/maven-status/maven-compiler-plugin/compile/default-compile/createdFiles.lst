@@ -14,6 +14,5 @@ br/edu/ifba/inf008/shell/models/LoanModel.class
 br/edu/ifba/inf008/shell/controllers/BookController.class
 br/edu/ifba/inf008/shell/controllers/PluginController$1.class
 br/edu/ifba/inf008/shell/Core.class
-br/edu/ifba/inf008/shell/controllers/AuthenticationController.class
 br/edu/ifba/inf008/shell/controllers/UserController.class
 br/edu/ifba/inf008/shell/controllers/LibCollectionController.class

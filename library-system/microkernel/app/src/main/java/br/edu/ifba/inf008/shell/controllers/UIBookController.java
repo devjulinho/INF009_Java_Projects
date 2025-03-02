@@ -221,7 +221,7 @@ public class UIBookController{
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Successful registration");
                 alert.setHeaderText(null);
-                alert.setContentText("The book " + titleField.getText() + " was successfuly registrated.");
+                alert.setContentText("The book '" + titleField.getText() + "' was successfully registrated.");
                 alert.showAndWait();
 
                 bookHomeScreen(primaryStage);

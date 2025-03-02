@@ -37,7 +37,6 @@ import javafx.stage.Stage;
 public class BorrowedBooks implements IPlugin{
 
     public IBookController bookController = ICore.getInstance().getBookController();
-    public ArrayList<IBookModel> books = bookController.getAllBooks();
 
     public boolean init() {
 
@@ -70,6 +69,7 @@ public class BorrowedBooks implements IPlugin{
     }
 
     private void borrowedBooksScreen(Stage newStage){
+        ArrayList<IBookModel> books = bookController.getAllBooks();
         newStage.setTitle("Borrowed Books");
 
         Text title = new Text("Borrowed Books");
@@ -98,7 +98,7 @@ public class BorrowedBooks implements IPlugin{
         flowPane.setVgap(10);
         flowPane.setAlignment(Pos.CENTER);
 
-        ObservableList<IBookModel> bookList = FXCollections.observableArrayList(this.books);
+        ObservableList<IBookModel> bookList = FXCollections.observableArrayList(books);
         FilteredList<IBookModel> filteredBooks = new FilteredList<>(bookList, b -> !b.isAvailable());
 
         for (IBookModel book : filteredBooks) {

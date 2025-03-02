@@ -1,6 +1,5 @@
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/App.java
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/Core.java
-/home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/AuthenticationController.java
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/BookController.java
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/IOController.java
 /home/julio/Desktop/INF008/library-system/microkernel/app/src/main/java/br/edu/ifba/inf008/shell/controllers/LibCollectionController.java
