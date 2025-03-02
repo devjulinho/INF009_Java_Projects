@@ -2,6 +2,8 @@ package br.edu.ifba.inf008.shell.controllers;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 import br.edu.ifba.inf008.shell.models.BookModel;
 import br.edu.ifba.inf008.shell.models.LoanModel;
@@ -9,6 +11,7 @@ import br.edu.ifba.inf008.shell.models.UserModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -36,7 +40,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
 public class UILoanController{
     
     private UILoanController(){
@@ -52,11 +55,11 @@ public class UILoanController{
 
     private HBox createCard(LoanModel loan) {
 
-        Label labelLoanBook = new Label(loan.book.toString());
-        labelLoanBook.setFont(Font.font(16));
-        labelLoanBook.setTextFill(Color.DARKBLUE);
+        Label labelLoanBooks = new Label("Books: " + loan.allBooksToString());
+        labelLoanBooks.setFont(Font.font(16));
+        labelLoanBooks.setTextFill(Color.DARKBLUE);
 
-        Label labelLoanUser = new Label(loan.user.toString());
+        Label labelLoanUser = new Label("User: " + loan.user.toString());
         labelLoanUser.setFont(Font.font(16));
         labelLoanUser.setTextFill(Color.DARKBLUE);
 
@@ -70,7 +73,7 @@ public class UILoanController{
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        VBox bothLabel = new VBox(labelLoanBook, labelLoanUser);
+        VBox bothLabel = new VBox(labelLoanUser, labelLoanBooks);
 
         HBox card = new HBox(10, bothLabel, spacer, accessUserButton);
         card.setAlignment(Pos.CENTER_LEFT);
@@ -145,6 +148,7 @@ public class UILoanController{
         userSearchField.setPromptText("Search for a user");
         
         ListView<BookModel> bookListView = new ListView<>();
+        bookListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         ListView<UserModel> userListView = new ListView<>();
         
         bookListView.getItems().addAll(BookController.books);
@@ -158,13 +162,16 @@ public class UILoanController{
         FilteredList<BookModel> filteredBooks = new FilteredList<>(bookList, b -> b.available);
         FilteredList<UserModel> filteredUsers = new FilteredList<>(userList, u -> u.getBorrowedBooks().size() < 5);
 
-        bookListView.setItems(filteredBooks);
+        SortedList<BookModel> sortedBooks = new SortedList<>(filteredBooks);
+        sortedBooks.setComparator(Comparator.comparing(b -> b.toString().toLowerCase()));
+
+        bookListView.setItems(sortedBooks);
         userListView.setItems(filteredUsers);
 
         bookSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredBooks.setPredicate(book ->
-                newValue == null || newValue.isEmpty() || book.toString().toLowerCase().contains(newValue.toLowerCase())
-            );
+                newValue == null || newValue.isEmpty() && book.available || book.toString().toLowerCase().contains(newValue.toLowerCase())
+            && book.available);
         });
 
         userSearchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -179,7 +186,9 @@ public class UILoanController{
         Button backButton = new Button("Back");
         
         bookListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            int selectedBooksCount = bookListView.getSelectionModel().getSelectedItems().size();
             loanButton.setDisable(bookListView.getSelectionModel().isEmpty() || userListView.getSelectionModel().isEmpty());
+            loanButton.setDisable(selectedBooksCount < 1 || selectedBooksCount > 5);
         });
         
         userListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -187,13 +196,15 @@ public class UILoanController{
         });
         
         loanButton.setOnAction(e -> {
-            BookModel selectedBook = bookListView.getSelectionModel().getSelectedItem();
+            ArrayList<BookModel> selectedBooks = new ArrayList(bookListView.getSelectionModel().getSelectedItems());
             UserModel selectedUser = userListView.getSelectionModel().getSelectedItem();
+
+            LoanController.addNewLoan(selectedUser, selectedBooks, LocalDate.of(2011, Month.JANUARY, 25));
             
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Empréstimo Realizado");
+            alert.setTitle("Loan Registrated!");
             alert.setHeaderText(null);
-            alert.setContentText("O livro '" + selectedBook + "' foi emprestado para '" + selectedUser + "'.");
+            alert.setContentText("The book(s) was successfully borrowed to '" + selectedUser + "'.");
             alert.showAndWait();
         });
 
@@ -241,12 +252,12 @@ public class UILoanController{
         HBox.setHgrow(rightSpacer, Priority.ALWAYS);
         header.getChildren().addAll(backButton, centerSpacer, title, rightSpacer);
 
-        LoanController.addNewLoan(new UserModel("NomeA"), new BookModel("NomeZ", "NomeZ", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
-        LoanController.addNewLoan(new UserModel("NomeB"), new BookModel("NomeX", "NomeX", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
-        LoanController.addNewLoan(new UserModel("NomeC"), new BookModel("NomeW", "NomeW", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
-        LoanController.addNewLoan(new UserModel("NomeD"), new BookModel("NomeY", "NomeY", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
-        LoanController.addNewLoan(new UserModel("NomeE"), new BookModel("NomeT", "NomeY", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
-        LoanController.addNewLoan(new UserModel("NomeF"), new BookModel("NomeU", "NomeU", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
+        // LoanController.addNewLoan(new UserModel("NomeA"), new BookModel("NomeZ", "NomeZ", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
+        // LoanController.addNewLoan(new UserModel("NomeB"), new BookModel("NomeX", "NomeX", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
+        // LoanController.addNewLoan(new UserModel("NomeC"), new BookModel("NomeW", "NomeW", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
+        // LoanController.addNewLoan(new UserModel("NomeD"), new BookModel("NomeY", "NomeY", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
+        // LoanController.addNewLoan(new UserModel("NomeE"), new BookModel("NomeT", "NomeY", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
+        // LoanController.addNewLoan(new UserModel("NomeF"), new BookModel("NomeU", "NomeU", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
         
         TextField searchField = new TextField();
         searchField.setPromptText("Search loans...");
@@ -271,14 +282,14 @@ public class UILoanController{
 
         updateLoanView.run();
 
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredLoans.setPredicate(loan ->
-                newValue == null || newValue.isEmpty() ||
-                loan.user.getName().toLowerCase().contains(newValue.toLowerCase()) ||
-                loan.book.getTitle().toLowerCase().contains(newValue.toLowerCase())
-            );
-            updateLoanView.run();
-        });
+        // searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+        //     filteredLoans.setPredicate(loan ->
+        //         newValue == null || newValue.isEmpty() ||
+        //         loan.user.getName().toLowerCase().contains(newValue.toLowerCase()) ||
+        //         loan.book.getTitle().toLowerCase().contains(newValue.toLowerCase())
+        //     );
+        //     updateLoanView.run();
+        // });
 
         VBox contentBox = new VBox(10, searchField, flowPane);
         contentBox.setPadding(new Insets(10));

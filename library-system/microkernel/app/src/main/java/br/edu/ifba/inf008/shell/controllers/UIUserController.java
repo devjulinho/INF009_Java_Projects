@@ -5,6 +5,7 @@ import br.edu.ifba.inf008.shell.models.UserModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -62,10 +63,10 @@ public class UIUserController{
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(10));
 
-        card.setMinWidth(850); // Largura mínima
-        card.setMaxWidth(850); // Largura máxima
-        card.setMinHeight(70); // Altura mínima
-        card.setMaxHeight(70); // Altura máxima
+        card.setMinWidth(850);
+        card.setMaxWidth(850);
+        card.setMinHeight(70);
+        card.setMaxHeight(70);
 
         card.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         card.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
@@ -86,31 +87,31 @@ public class UIUserController{
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
         VBox.setMargin(title, new Insets(0, 0, 30, 0));
 
-        Button button1 = new Button("Register a new user");
-        Button button2 = new Button("All registered users");
-        Button button3 = new Button("Back");
+        Button registerNewUserButton = new Button("Register a new user");
+        Button allUsersButton = new Button("All registered users");
+        Button exitButton = new Button("Back");
 
-        button1.setMinSize(300, 120);
-        button2.setMinSize(300, 120);
-        button3.setMinSize(200, 50);
+        registerNewUserButton.setMinSize(300, 120);
+        allUsersButton.setMinSize(300, 120);
+        exitButton.setMinSize(200, 50);
 
-        button1.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
-        button2.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        registerNewUserButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        allUsersButton.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-        HBox row1 = new HBox(10, button1, button2);
+        HBox row1 = new HBox(10, registerNewUserButton, allUsersButton);
         row1.setAlignment(Pos.CENTER);
-        VBox.setMargin(button3, new Insets(20, 0, 0, 0));
-        vbox.getChildren().addAll(title, row1, button3);
+        VBox.setMargin(exitButton, new Insets(20, 0, 0, 0));
+        vbox.getChildren().addAll(title, row1, exitButton);
 
-        button1.setOnAction(e -> {
+        registerNewUserButton.setOnAction(e -> {
             registerUserScreen(primaryStage);
         });
 
-        button2.setOnAction(e -> {
+        allUsersButton.setOnAction(e -> {
             allRegisteredUsersScreen(primaryStage);
         });
 
-        button3.setOnAction(e -> {
+        exitButton.setOnAction(e -> {
             UIController.getInstance().start(primaryStage);
         });
 
@@ -134,16 +135,31 @@ public class UIUserController{
 
         Label label1 = new Label("Name:");
         label1.setStyle("-fx-font-size: 16px;");
-        TextField field1 = new TextField();
+        TextField nameField = new TextField();
         grid.add(label1, 0, 0);
-        grid.add(field1, 1, 0);
+        grid.add(nameField, 1, 0);
 
         Button sendButton = new Button("Send");
         sendButton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
         sendButton.setOnAction(e -> {
-            System.out.println("Dados enviados:");
-            System.out.println("a: " + field1.getText());
+            if(nameField.getText().isBlank()){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Miss information!");
+                alert.setHeaderText(null);
+                alert.setContentText("The name can't be blank.");
+                alert.showAndWait();
+            } else {
+                UserController.addUser(nameField.getText());
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Successful registration");
+                alert.setHeaderText(null);
+                alert.setContentText("The user " + nameField.getText() + " was successfuly created.");
+                alert.showAndWait();
+
+                userHomeScreen(primaryStage);
+            }
         });
 
         Button backButton = new Button("Back");
@@ -182,14 +198,14 @@ public class UIUserController{
         HBox.setHgrow(rightSpacer, Priority.ALWAYS);
         header.getChildren().addAll(backButton, centerSpacer, title, rightSpacer);
 
-        UserController.addUser("Nome1");
-        UserController.addUser("Nome1");
-        UserController.addUser("Nome1");
-        UserController.addUser("Nome1");
-        UserController.addUser("Nome1");
-        UserController.addUser("Nome1");
-        UserController.addUser("Nome1");
-        UserController.addUser("Nome1");
+        // UserController.addUser("Nome1");
+        // UserController.addUser("Nome1");
+        // UserController.addUser("Nome1");
+        // UserController.addUser("Nome1");
+        // UserController.addUser("Nome1");
+        // UserController.addUser("Nome1");
+        // UserController.addUser("Nome1");
+        // UserController.addUser("Nome1");
 
         FlowPane flowPane = new FlowPane();
         flowPane.setPadding(new Insets(10));
@@ -203,11 +219,10 @@ public class UIUserController{
         }
 
         ScrollPane scrollPane = new ScrollPane(flowPane);
-        scrollPane.setFitToWidth(true); // Faz o ScrollPane ajustar a largura ao conteúdo
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Remove a barra de rolagem horizontal
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED); // Adiciona a barra de rolagem vertical quando necessário
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-        // Configurando o layout principal
         StackPane root = new StackPane(scrollPane);
         root.setPadding(new Insets(10));
 
@@ -218,7 +233,6 @@ public class UIUserController{
 
         vbox.getChildren().addAll(header, root);
 
-        // Criando a cena e exibindo a janela
         Scene scene = new Scene(vbox, 1000, 600);
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -51,7 +51,7 @@ public class UIBookController{
         labelTitle.setTextFill(Color.DARKBLUE);
         
         Label labelISBN = new Label("ISBN: " + book.getIsbn());
-        labelISBN.setFont(Font.font(14));
+        labelISBN.setFont(Font.font(11));
         labelISBN.setTextFill(Color.BLACK);
 
         Label labelAuthor = new Label("Author(s): " + book.getAuthor());
@@ -66,7 +66,7 @@ public class UIBookController{
         labelGenre.setFont(Font.font(14));
         labelGenre.setTextFill(Color.BLACK);
 
-        VBox card = new VBox(10, labelTitle, labelISBN, labelAuthor, labelGenre, labelReleaseYear);
+        VBox card = new VBox(10, labelTitle, labelAuthor, labelGenre, labelReleaseYear, labelISBN);
         card.setAlignment(Pos.CENTER);
         card.setPadding(new Insets(10));
 
@@ -76,7 +76,11 @@ public class UIBookController{
         card.setMaxHeight(180);
 
         card.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-        card.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
+
+        if(book.available == true)
+            card.setBorder(new Border(new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
+        else
+            card.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1))));
 
         return card;
     }
@@ -219,6 +223,8 @@ public class UIBookController{
                 alert.setHeaderText(null);
                 alert.setContentText("The book " + titleField.getText() + " was successfuly registrated.");
                 alert.showAndWait();
+
+                bookHomeScreen(primaryStage);
             }
         });
 
@@ -244,15 +250,13 @@ public class UIBookController{
         Button backButton = new Button("Back");
         backButton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
 
-        // Configurando a ação do botão "Voltar"
         backButton.setOnAction(e -> {
             bookHomeScreen(primaryStage);
         });
 
-        // Criando um HBox para organizar o título e o botão "Voltar"
-        HBox header = new HBox(); // Espaçamento de 10 entre os elementos
-        header.setAlignment(Pos.CENTER); // Alinha o título à esquerda e o botão à direita
-        header.setPadding(new Insets(10)); // Adiciona um padding ao redor do HBox
+        HBox header = new HBox();
+        header.setAlignment(Pos.CENTER);
+        header.setPadding(new Insets(10));
 
         Region centerSpacer = new Region();
         Region rightSpacer = new Region();
@@ -260,22 +264,23 @@ public class UIBookController{
         HBox.setHgrow(rightSpacer, Priority.ALWAYS);
         header.getChildren().addAll(backButton, centerSpacer, title, rightSpacer);
 
-        // BookController.addNewBook("NomeDisp1", "NomeDisp1", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("NomeDisp2", "NomeDisp2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
-        // BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("NomeDisp1", "a", "Nome3", 1000, "Nome4");
+        BookController.books.get(0).available = false;
+        BookController.addNewBook("NomeDisp2", "NomeDisp2", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome3", "b", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome4", "c", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome1", "d", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome2", "e", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome3", "f", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome3", "Nome2", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome4", "Nome2", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome1", "Nome2", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome2", "Nome2", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome3", "x", "Nome3", 1000, "Nome4");
+        BookController.addNewBook("Nome4", "z", "Nome3", 1000, "Nome4");
 
         FlowPane flowPane = new FlowPane();
         flowPane.setPadding(new Insets(10));
@@ -289,22 +294,18 @@ public class UIBookController{
         }
 
         ScrollPane scrollPane = new ScrollPane(flowPane);
-        scrollPane.setFitToWidth(true); // Faz o ScrollPane ajustar a largura ao conteúdo
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER); // Remove a barra de rolagem horizontal
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED); // Adiciona a barra de rolagem vertical quando necessário
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-        // Configurando o layout principal
         StackPane root = new StackPane(scrollPane);
         root.setPadding(new Insets(10));
-
 
         VBox vbox = new VBox(20);
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(30));
-
         vbox.getChildren().addAll(header, root);
 
-        // Criando a cena e exibindo a janela
         Scene scene = new Scene(vbox, 1000, 600);
         primaryStage.setScene(scene);
         primaryStage.show();

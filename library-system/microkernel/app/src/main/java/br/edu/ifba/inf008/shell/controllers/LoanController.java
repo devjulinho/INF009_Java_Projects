@@ -11,8 +11,7 @@ import br.edu.ifba.inf008.shell.models.UserModel;
 public class LoanController implements ILoanController{
     public static ArrayList<LoanModel> loans = new ArrayList<>();
 
-    public static void addNewLoan(UserModel user, BookModel book, LocalDate date){
-        loans.add(new LoanModel(user, book, date));
+    public static void addNewLoan(UserModel user, ArrayList<BookModel> books, LocalDate date){
+        loans.add(new LoanModel(user, books, date));
     }
-
 }
