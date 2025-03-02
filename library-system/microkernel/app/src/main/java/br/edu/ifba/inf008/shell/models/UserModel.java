@@ -8,10 +8,12 @@ public class UserModel implements Serializable{
     protected int id;
     protected String name;
     public ArrayList<BookModel> borrowedBooks = new ArrayList<>();
+    public double fine;
 
     public UserModel(String name){
         this.id = referenceId++;
         this.name = name;
+        this.fine = 0;
     }
 
     public String getName(){

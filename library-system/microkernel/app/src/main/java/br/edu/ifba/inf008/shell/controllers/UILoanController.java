@@ -1,7 +1,6 @@
 package br.edu.ifba.inf008.shell.controllers;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -17,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -63,19 +63,24 @@ public class UILoanController{
         labelLoanUser.setFont(Font.font(16));
         labelLoanUser.setTextFill(Color.DARKBLUE);
 
-        Button accessUserButton = new Button("Return");
-        accessUserButton.setStyle("-fx-font-size: 14px; -fx-font-weight:bold;");
+        Label labelDate = new Label("Start Date: " + loan.startDate + " | Limit devolution date: " + loan.devolutionDate);
+        labelDate.setFont(Font.font(16));
+        labelDate.setTextFill(Color.DARKBLUE);
 
-        accessUserButton.setOnAction(e -> {
-            System.out.println("Return book!");
+        Button returnBookButton = new Button("Return");
+        returnBookButton.setStyle("-fx-font-size: 14px; -fx-font-weight:bold;");
+
+        returnBookButton.setOnAction(e -> {
+            Stage returnStage = new Stage();
+            informReturnScreen(returnStage, loan);
         });
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        VBox bothLabel = new VBox(labelLoanUser, labelLoanBooks);
+        VBox bothLabel = new VBox(labelLoanUser, labelLoanBooks, labelDate);
 
-        HBox card = new HBox(10, bothLabel, spacer, accessUserButton);
+        HBox card = new HBox(10, bothLabel, spacer, returnBookButton);
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(10));
 
@@ -138,6 +143,10 @@ public class UILoanController{
     protected void newLoanScreen(Stage primaryStage){
         primaryStage.setTitle("Salvador's Library - Loan");
         
+        Label loanDateLabel = new Label("Loan Date:");
+        DatePicker loanDatePicker = new DatePicker();
+        loanDatePicker.setValue(LocalDate.now());
+        
         Label titleLabel = new Label("Select a book and a user:");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
@@ -160,7 +169,7 @@ public class UILoanController{
         ObservableList<UserModel> userList = FXCollections.observableArrayList(UserController.users);
 
         FilteredList<BookModel> filteredBooks = new FilteredList<>(bookList, b -> b.available);
-        FilteredList<UserModel> filteredUsers = new FilteredList<>(userList, u -> u.getBorrowedBooks().size() < 5);
+        FilteredList<UserModel> filteredUsers = new FilteredList<>(userList, u -> true);
 
         SortedList<BookModel> sortedBooks = new SortedList<>(filteredBooks);
         sortedBooks.setComparator(Comparator.comparing(b -> b.toString().toLowerCase()));
@@ -187,25 +196,38 @@ public class UILoanController{
         
         bookListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             int selectedBooksCount = bookListView.getSelectionModel().getSelectedItems().size();
-            loanButton.setDisable(bookListView.getSelectionModel().isEmpty() || userListView.getSelectionModel().isEmpty());
-            loanButton.setDisable(selectedBooksCount < 1 || selectedBooksCount > 5);
+            loanButton.setDisable(bookListView.getSelectionModel().isEmpty() || userListView.getSelectionModel().isEmpty() ||
+            selectedBooksCount < 1 || selectedBooksCount > 5);
         });
         
         userListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            loanButton.setDisable(bookListView.getSelectionModel().isEmpty() || userListView.getSelectionModel().isEmpty());
+            int selectedBooksCount = bookListView.getSelectionModel().getSelectedItems().size();
+            loanButton.setDisable(bookListView.getSelectionModel().isEmpty() || userListView.getSelectionModel().isEmpty() ||
+            selectedBooksCount < 1 || selectedBooksCount > 5);
         });
+
+        LocalDate loanDate = loanDatePicker.getValue();
+
+        VBox loanDateBox = new VBox(10, loanDateLabel, loanDatePicker);
+        loanDateBox.setAlignment(Pos.CENTER);
         
         loanButton.setOnAction(e -> {
             ArrayList<BookModel> selectedBooks = new ArrayList(bookListView.getSelectionModel().getSelectedItems());
             UserModel selectedUser = userListView.getSelectionModel().getSelectedItem();
 
-            LoanController.addNewLoan(selectedUser, selectedBooks, LocalDate.of(2011, Month.JANUARY, 25));
+            LoanController.addNewLoan(selectedUser, selectedBooks, loanDate);
+            selectedUser.borrowedBooks.addAll(new ArrayList(bookListView.getSelectionModel().getSelectedItems()));
+            for(BookModel book : selectedBooks){
+                book.available = false;
+            }
             
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Loan Registrated!");
             alert.setHeaderText(null);
             alert.setContentText("The book(s) was successfully borrowed to '" + selectedUser + "'.");
             alert.showAndWait();
+
+            loanHomeScreen(primaryStage);
         });
 
         backButton.setOnAction(e -> {
@@ -220,7 +242,7 @@ public class UILoanController{
         HBox selectionBox = new HBox(20, bookColumn, userColumn);
         selectionBox.setAlignment(Pos.CENTER);
         
-        VBox layout = new VBox(20, titleLabel, selectionBox, loanButton, backButton);
+        VBox layout = new VBox(20, titleLabel, selectionBox, loanDateBox, loanButton, backButton);
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
         
@@ -251,13 +273,6 @@ public class UILoanController{
         HBox.setHgrow(centerSpacer, Priority.ALWAYS);
         HBox.setHgrow(rightSpacer, Priority.ALWAYS);
         header.getChildren().addAll(backButton, centerSpacer, title, rightSpacer);
-
-        // LoanController.addNewLoan(new UserModel("NomeA"), new BookModel("NomeZ", "NomeZ", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
-        // LoanController.addNewLoan(new UserModel("NomeB"), new BookModel("NomeX", "NomeX", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
-        // LoanController.addNewLoan(new UserModel("NomeC"), new BookModel("NomeW", "NomeW", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
-        // LoanController.addNewLoan(new UserModel("NomeD"), new BookModel("NomeY", "NomeY", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
-        // LoanController.addNewLoan(new UserModel("NomeE"), new BookModel("NomeT", "NomeY", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
-        // LoanController.addNewLoan(new UserModel("NomeF"), new BookModel("NomeU", "NomeU", "Nome3", 1000, "Nome4"), LocalDate.of(2011, Month.JANUARY, 25));
         
         TextField searchField = new TextField();
         searchField.setPromptText("Search loans...");
@@ -282,14 +297,14 @@ public class UILoanController{
 
         updateLoanView.run();
 
-        // searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-        //     filteredLoans.setPredicate(loan ->
-        //         newValue == null || newValue.isEmpty() ||
-        //         loan.user.getName().toLowerCase().contains(newValue.toLowerCase()) ||
-        //         loan.book.getTitle().toLowerCase().contains(newValue.toLowerCase())
-        //     );
-        //     updateLoanView.run();
-        // });
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredLoans.setPredicate(loan ->
+                newValue == null || newValue.isEmpty() ||
+                loan.user.getName().toLowerCase().contains(newValue.toLowerCase()) ||
+                loan.allBooksToString().toLowerCase().contains(newValue.toLowerCase())
+            );
+            updateLoanView.run();
+        });
 
         VBox contentBox = new VBox(10, searchField, flowPane);
         contentBox.setPadding(new Insets(10));
@@ -302,7 +317,6 @@ public class UILoanController{
         StackPane root = new StackPane(scrollPane);
         root.setPadding(new Insets(10));
 
-
         VBox vbox = new VBox(20);
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(30));
@@ -312,5 +326,36 @@ public class UILoanController{
         Scene scene = new Scene(vbox, 1000, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    protected void informReturnScreen(Stage returnStage, LoanModel loan){
+        returnStage.setTitle("Returning a book");
+
+        Label label = new Label("Please, inform the date:");
+        label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+        DatePicker datePicker = new DatePicker();
+        datePicker.setValue(LocalDate.now());
+
+        Button sendButton = new Button("Send");
+        sendButton.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        sendButton.setOnAction(e -> {
+            LocalDate selectedDate = datePicker.getValue();
+            loan.finalDate = selectedDate;
+            loan.user.borrowedBooks.removeAll(loan.books);
+            
+            for(BookModel book : loan.books){
+                book.available = true;
+            }
+        });
+
+        VBox layout = new VBox(20, label, datePicker, sendButton);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(20));
+
+        Scene scene = new Scene(layout, 300, 200);
+        returnStage.setScene(scene);
+        returnStage.show();
     }
 }

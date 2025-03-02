@@ -15,7 +15,7 @@ public class LoanModel implements Serializable{
         this.user = user;
         this.books = books;
         this.startDate = startDate;
-        this.devolutionDate = startDate.plusDays(7);
+        this.devolutionDate = startDate.plusDays(14);
     }
 
     public String allBooksToString(){

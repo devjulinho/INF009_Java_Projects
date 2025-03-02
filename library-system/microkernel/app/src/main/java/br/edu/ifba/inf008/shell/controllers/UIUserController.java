@@ -238,7 +238,7 @@ public class UIUserController{
         primaryStage.show();
     }
 
-    private void userProfileScreen(UserModel user, Stage userStage){
+    protected void userProfileScreen(UserModel user, Stage userStage){
         
         userStage.setTitle("Salvador's Library - Users");
 
@@ -255,8 +255,13 @@ public class UIUserController{
         flowPane.setVgap(10);
         flowPane.setAlignment(Pos.CENTER_LEFT);
 
+        ScrollPane scrollPane = new ScrollPane(flowPane);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
         for (BookModel book : user.getBorrowedBooks()) {
-            VBox card = UIBookController.getInstance().createSmallCard(book);
+            HBox card = UIBookController.getInstance().createSmallCard(book);
             flowPane.getChildren().add(card);
         }
 
@@ -265,7 +270,7 @@ public class UIUserController{
         HBox backButtonBox = new HBox(10, backButton);
         backButtonBox.setAlignment(Pos.CENTER);
 
-        VBox layout = new VBox(10, IdLabel, nameLabel, borrowedBooksLabel, flowPane, backButtonBox);
+        VBox layout = new VBox(10, IdLabel, nameLabel, borrowedBooksLabel, scrollPane, backButtonBox);
         layout.setPadding(new javafx.geometry.Insets(15));
 
         Scene scene = new Scene(layout, 800, 550);

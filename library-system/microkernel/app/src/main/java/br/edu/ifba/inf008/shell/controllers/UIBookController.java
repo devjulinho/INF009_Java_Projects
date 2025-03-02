@@ -85,14 +85,14 @@ public class UIBookController{
         return card;
     }
 
-    public VBox createSmallCard(BookModel book) {
+    public HBox createSmallCard(BookModel book) {
 
         Label labelText = new Label("Title: " + book.getTitle() + " (" + book.getReleaseYear() + ") - " + book.getAuthor());
         labelText.setFont(Font.font(16));
         labelText.setTextFill(Color.DARKBLUE);
 
-        VBox card = new VBox(10, labelText);
-        card.setAlignment(Pos.CENTER);
+        HBox card = new HBox(10, labelText);
+        card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(10));
 
         card.setMinWidth(750);
