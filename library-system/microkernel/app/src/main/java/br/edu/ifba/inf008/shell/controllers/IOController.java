@@ -65,7 +65,7 @@ public class IOController implements IIOController{
             BookController.books = (ArrayList<BookModel>) ois.readObject();
             LoanController.loans = (ArrayList<LoanModel>) ois.readObject();
             if(!UserController.users.isEmpty()){
-                UserModel.referenceId = ois.readInt();
+                UserModel.referenceId = (int)ois.readObject();
             }
 
             ois.close();

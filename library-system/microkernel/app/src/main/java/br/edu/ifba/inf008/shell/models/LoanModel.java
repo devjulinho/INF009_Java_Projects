@@ -43,7 +43,7 @@ public class LoanModel implements Serializable, ILoanModel{
     }
 
     public double getFineAmount(){
-        return (amountOfLateDays() - 14) * 0.5;
+        return (amountOfLateDays()) * 0.5;
     }
 
     public ArrayList<BookModel> getBorrowedBooks(){
